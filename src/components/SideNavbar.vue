@@ -36,35 +36,35 @@ function toggleMenu() {
       <!-- Primary top nav -->
       <ul class="nav-list primary-nav">
         <li class="nav-item">
-          <RouterLink to="/dashboard" class="nav-link">
+          <RouterLink to="/nowISS" class="nav-link">
               <i class="fa-solid fa-satellite"></i>        
               <span class="nav-label">Now ISS</span>
           </RouterLink>
           <span class="nav-tooltip">Now ISS</span>
         </li>
         <li class="nav-item">
-          <RouterLink to="/calendar" class="nav-link">
+          <RouterLink to="/commumity" class="nav-link">
               <i class="fa-regular fa-comments"></i>           
               <span class="nav-label">Community</span>
           </RouterLink>
           <span class="nav-tooltip">Community</span>
         </li>
         <li class="nav-item">
-          <RouterLink to="/notifications" class="nav-link">
+          <RouterLink to="/aboutEarth" class="nav-link">
               <i class="fa-solid fa-earth-asia"></i>         
               <span class="nav-label">About Earth</span>
           </RouterLink>
           <span class="nav-tooltip">About Earth</span>
         </li>
         <li class="nav-item">
-          <RouterLink to="/team" class="nav-link">
+          <RouterLink to="/constellations" class="nav-link">
               <i class="fa-regular fa-star"></i>      
               <span class="nav-label">Constellations</span>
           </RouterLink>
           <span class="nav-tooltip">Constellations</span>
         </li>
            <li class="nav-item">
-          <RouterLink to="/team" class="nav-link">
+          <RouterLink to="/moonPhases" class="nav-link">
             <i class="fa-solid fa-moon"></i>        
             <span class="nav-label">Moon Phases</span>
           </RouterLink>
