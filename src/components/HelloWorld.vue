@@ -1,4 +1,7 @@
 <script setup>
+import { ref, onMounted } from 'vue';
+import axios from '@/axios';
+
 defineProps({
   msg: {
     type: String,
@@ -6,14 +9,31 @@ defineProps({
   },
 })
 
+const totalCount = ref(0);
+
+onMounted(async () => {
+  try {
+    const res = await axios.get("visit/1");
+    const newCount = res.data.totalCount + 1;
+
+    await axios.put("visit/1", {
+      totalCount: newCount
+    });
+     totalCount.value = newCount; 
+
+  } catch (error) {
+    console.error("방문자 수 처리 중 오류 발생:", error);
+  }
+});
+
 </script>
 
 <template>
   <div class="greetings">
     <h1 class="green">{{ msg }}</h1>
      <p className="text-cyan-300">
-              👥 전체 방문자 수 : {{ totalCount }}
-      </p>
+        👥 전체 방문자 수 : {{ totalCount }}
+     </p>
   </div>
 </template>
 

@@ -1,30 +1,110 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import axios from '@/axios';
 
 import SideNavbar from '@/components/SideNavbar.vue';
 const showModal = ref(false);
-const community = ref({
-  title: '',
-  content: '',
-  author: '',
-  createDate: '',
-  updateDate: '',
-  
-})
-const openModal = () => {
-  showModal.value = true;
-}
+    const community = ref({
+      id : '',
+      title: '',
+      content: '',
+      author: '',
+      createDate: '',
+      updateDate: '',
+      
+    });
 
-const closeModal = () => {
-  showModal.value = false;
-}
+    const openModal = () => {
+      showModal.value = true;
+    };
+
+    const closeModal = () => {
+      showModal.value = false;
+    };
+
+    onMounted(async() => {
+          const res = await axios.get("board");
+          console.log("get community = ", res.data);
+          community.value = res.data
+
+    });
+
+    const titleError = ref('');
+    const authorError = ref('');
+    const contentError = ref('');
+
+ const saveBoard = async () => {
+      if (!community.value.title) {
+        titleError.value = 'Title is required.';
+        return;
+      }
+
+      if (!community.value.author) {
+        authorError.value = 'Author is required.';
+        return;
+      }
+
+      if (!community.value.content) {
+        contentError.value = 'Content is required.';
+        return;
+      }
+
+  try {
+    const data = {
+      author: community.value.author,
+      title: community.value.title,
+      content: community.value.content,
+    };
+
+    const res = await axios.post('board', data);
+    console.log('Saved:', res.data);
+  } catch (error) {
+    console.error('Error saving board:', error);
+  }
+};
+
+
 </script>
 
 <template>
       <SideNavbar />
+<div>  
+<div class="container">
+    <!-- 페이지 타이틀 -->
+    <h1 class="title">community page</h1>
 
-  <div>community page</div>
-    <button @click="openModal">Create</button>
+    <!-- 버튼과 테이블 -->
+    <div class="table-section">
+      <!-- 버튼: 테이블 상단 오른쪽 정렬 -->
+      <div class="table-header">
+        <button @click="openModal" class="create-button">Create</button>
+      </div>
+
+      <!-- 테이블 -->
+      <table class="table table-hover community-table">
+        <thead>
+          <tr>
+            <th>번호</th>
+            <th>작성자</th>
+            <th>제목</th>
+            <th>내용</th>
+            <th>작성 날짜</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="board in community" :key="board.createDate">
+            <td>{{ board.id }}</td>
+            <td>{{ board.author }}</td>
+            <td>{{ board.title }}</td>
+            <td>{{ board.content }}</td>
+            <td>{{ new Date(board.createDate).toLocaleDateString() }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+    
 
     <!-- 모달 -->
     <div v-if="showModal" class="modal-backdrop">
@@ -35,13 +115,18 @@ const closeModal = () => {
           <input v-model="title" type="text" />
         </label>
         <label>
+          작성자:
+          <input v-model="author" type="text" />
+        </label>
+        <label>
           내용:
           <textarea v-model="content"></textarea>
         </label>
-
+        
         <div class="modal-buttons">
-          <button @click="save">저장</button>
-          <button @click="closeModal">취소</button>
+          <button class="btn btn-outline-dark" @click="closeModal">취소</button>
+          <button class="btn btn-primary" @click="saveBoard">저장</button>
+
         </div>
       </div>
     </div>
@@ -65,7 +150,7 @@ const closeModal = () => {
   background: white;
   padding: 1.5rem;
   border-radius: 0.5rem;
-  width: 300px;
+  width: 700px;
 }
 
 .modal-content label {
@@ -86,5 +171,55 @@ const closeModal = () => {
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
+}
+
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+}
+
+.table-section {
+  width: 100%;
+}
+
+.table-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.create-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.create-button:hover {
+  background-color: #0b5ed7;
+}
+
+.community-table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  word-break: break-word;
+}
+
+.community-table th,
+.community-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
 }
 </style>

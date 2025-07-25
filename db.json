@@ -1,1 +1,34 @@
-{}
+{
+  "visit": [
+    {
+      "totalCount": 54,
+      "id": "1"
+    }
+  ],
+  "board": [
+    {
+      "id": 1,
+      "author": "홍길동",
+      "title": "test",
+      "content": "test",
+      "createDate": "2025-07-25T14:30:00Z",
+      "updateDate": "null"
+    },
+    {
+      "id": 2,
+      "author": "김철수",
+      "title": "test",
+      "content": "test",
+      "createDate": "2025-07-25T14:32:00Z",
+      "updateDate": "2025-07-25T15:00:00Z"
+    },
+    {
+      "id": 3,
+      "author": "김영희",
+      "title": "test",
+      "content": "test",
+      "createDate": "2025-07-25T14:33:00Z",
+      "updateDate": "2025-07-25T15:00:00Z"
+    }
+  ]
+}

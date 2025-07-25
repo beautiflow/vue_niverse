@@ -1,10 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, PointLight, SphereGeometry, MeshBasicMaterial, Mesh } from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 
-const props = defineProps({
+
+defineProps({
   userPosition: {
     type: Object,
     required: true,
@@ -15,7 +13,6 @@ const props = defineProps({
   }
 });
 
-console.log("props = ", props)
 
 
 </script>
@@ -24,11 +21,11 @@ console.log("props = ", props)
 <div>
     Earth<br />
      <hr />
-    사용자 위도: {{ props.userPosition.lat }}<br />
-    사용자 경도: {{ props.userPosition.lng }}
+    사용자 위도: {{ userPosition.lat }}<br />
+    사용자 경도: {{ userPosition.lng }}
     <hr />
-    iss 위도: {{ props.userPosition.lat }}<br />
-    iss 경도: {{ props.userPosition.lng }}
+    iss 위도: {{ userPosition.lat }}<br />
+    iss 경도: {{ userPosition.lng }}
 </div>
 
   <canvas ref="canvasRef"></canvas>

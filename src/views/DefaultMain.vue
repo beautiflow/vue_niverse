@@ -1,26 +1,40 @@
 <script setup>
 import HelloWorld from '@/components/HelloWorld.vue'
 import HomeView from '@/views/HomeView.vue'
-
-
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/earthLogo.jpg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
+  <div class="container">
+    <!-- 왼쪽 영역 -->
+    <div class="left-panel">
+      <header>
+        <img alt="Vue logo" class="logo" src="@/assets/earthLogo.jpg" width="125" height="125" />
+        <div class="wrapper">
+          <HelloWorld msg="You did it!" />
+        </div>
+      </header>
     </div>
 
-  </header>
-    
-  <HomeView />
-
+    <!-- 오른쪽 영역 -->
+    <div class="right-panel">
+      <HomeView />
+    </div>
+  </div>
 </template>
 
 <style scoped>
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 반반 나누기 */
+  height: 100vh;
+}
+
+.left-panel,
+.right-panel {
+  padding: 2rem;
+  overflow-y: auto;
+}
+
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -31,55 +45,19 @@ header {
   margin: 0 auto 2rem;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
+.wrapper {
   text-align: center;
-  margin-top: 2rem;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+/* 반응형 유지 */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  .left-panel,
+  .right-panel {
+    padding: 1rem;
   }
 }
 </style>
