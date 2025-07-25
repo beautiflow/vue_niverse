@@ -22,7 +22,7 @@ import WelcomeItem from './WelcomeItem.vue'
     </template>
 
     <template #heading>
-      <RouterLink to="/about">Community</RouterLink>
+      <RouterLink to="/community">Community</RouterLink>
     </template>
  
   </WelcomeItem>
@@ -33,7 +33,7 @@ import WelcomeItem from './WelcomeItem.vue'
     </template>
 
     <template #heading>
-      <RouterLink to="/about">About Earth</RouterLink>
+      <RouterLink to="/aboutEarth">About Earth</RouterLink>
     </template>
  
    
@@ -44,7 +44,7 @@ import WelcomeItem from './WelcomeItem.vue'
       <i class="fa-regular fa-star"></i>      
     </template>
     <template #heading>
-      <RouterLink to="/about">Constellations</RouterLink>
+      <RouterLink to="/constellations">Constellations</RouterLink>
     </template>
     
   </WelcomeItem>
@@ -54,7 +54,7 @@ import WelcomeItem from './WelcomeItem.vue'
       <i class="fa-solid fa-moon"></i>        
     </template>
     <template #heading>
-      <RouterLink to="/about">Moon Phases</RouterLink>
+      <RouterLink to="/moonPhases">Moon Phases</RouterLink>
     </template>
     
   </WelcomeItem>
@@ -64,7 +64,7 @@ import WelcomeItem from './WelcomeItem.vue'
       <i class="fa-solid fa-gear"></i>        
     </template>
     <template #heading>
-      <RouterLink to="/about">Settings</RouterLink>
+      <RouterLink to="/setting">Settings</RouterLink>
     </template>
   </WelcomeItem>
 </template>

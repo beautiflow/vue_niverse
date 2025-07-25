@@ -7,7 +7,7 @@ import HomeView from '@/views/HomeView.vue'
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/earth.jpg" width="125" height="125" />
+    <img alt="Vue logo" class="logo" src="@/assets/earthLogo.jpg" width="125" height="125" />
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />

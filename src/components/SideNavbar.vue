@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
-import earth from '@/assets/earth.jpg';
+import earth from '@/assets/earthLogo.jpg';
 
-const isCollapsed = ref(false);
+const isCollapsed = ref(true);
 const isMenuActive = ref(false);
 
 function toggleSidebar() {
@@ -43,7 +43,7 @@ function toggleMenu() {
           <span class="nav-tooltip">Now ISS</span>
         </li>
         <li class="nav-item">
-          <RouterLink to="/commumity" class="nav-link">
+          <RouterLink to="/community" class="nav-link">
               <i class="fa-regular fa-comments"></i>           
               <span class="nav-label">Community</span>
           </RouterLink>
@@ -88,13 +88,13 @@ function toggleMenu() {
           </RouterLink>
           <span class="nav-tooltip">Profile</span>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <RouterLink to="/logout" class="nav-link">
             <i class="fa-solid fa-arrow-right-to-bracket"></i>     
             <span class="nav-label">Logout</span>
           </RouterLink>
           <span class="nav-tooltip">Logout</span>
-        </li>
+        </li> -->
       </ul>
     </nav>
   </aside>

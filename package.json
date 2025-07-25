@@ -14,6 +14,8 @@
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
     "@fortawesome/vue-fontawesome": "^3.1.1",
+    "json-server": "^1.0.0-beta.3",
+    "three": "^0.178.0",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
   },
