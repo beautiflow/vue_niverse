@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# vue_niverse
-=======
 # vue_niverse
 
 This template should help get you started developing with Vue 3 in Vite.
