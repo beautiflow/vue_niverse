@@ -33,4 +33,3 @@ npm run build
 ```sh
 npm run lint
 ```
->>>>>>> 1ed4fbe (init project)
