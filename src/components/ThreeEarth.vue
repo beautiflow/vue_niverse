@@ -1,4 +1,10 @@
 <script setup>
+import { ref, onMounted } from 'vue';
+import { Scene, PerspectiveCamera, WebGLRenderer, SphereGeometry,
+  MeshBasicMaterial, Mesh, AmbientLight, PointLight
+  } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import * as THREE from 'three';
 
 
 
@@ -13,6 +19,69 @@ defineProps({
   }
 });
 
+const canvasRef = ref(null)
+
+const initScene = () => {
+  const scene = new Scene();
+  return scene;
+}
+
+const initCamera = (sizes) => {
+  const camera = new PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 100)
+  camera.position.set(0, 0, 2.5);
+  return camera;
+}
+
+const initRenderer = (canvas) => {
+  const renderer = new WebGLRenderer({ canvas });
+  return renderer;
+}
+
+  // const textureLoader = new THREE.TextureLoader();
+  // const earthTexture = textureLoader.load('/earth.png'); 
+
+const createEarth = () => {
+  const geometry = new SphereGeometry(1, 64, 64);
+  const material = new MeshBasicMaterial({ color: '#141A2E' });
+  const mesh = new Mesh(geometry, material);
+  return mesh;
+}
+const setThree = () => {
+  const sizes = { width: 800, height: 600 }
+  const scene = initScene();
+  const camera = initCamera(sizes);
+  const renderer = initRenderer(canvasRef.value);
+  renderer.setSize(sizes.width, sizes.height);
+
+  const ambientLight = new AmbientLight(0xffffff, 0.5);
+  scene.add(ambientLight);
+  const pointLight = new PointLight(0xffffff, 1);
+  pointLight.position.set(10, 10, 10);
+  scene.add(pointLight);
+
+  const earth = createEarth();
+  scene.add(earth);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableZoom = true;
+  controls.enablePan = true;
+  controls.enableRotate = true;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.5;
+
+  const animate = () => {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+onMounted(() => {
+  if (canvasRef.value) {
+    setThree();
+  }
+})
 
 
 </script>

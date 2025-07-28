@@ -29,35 +29,43 @@ const showModal = ref(false);
 
     });
 
-    const titleError = ref('');
-    const authorError = ref('');
-    const contentError = ref('');
+    // const titleError = ref('');
+    // const authorError = ref('');
+    // const contentError = ref('');
 
  const saveBoard = async () => {
-      if (!community.value.title) {
-        titleError.value = 'Title is required.';
-        return;
-      }
+      // if (!community.value.title) {
+      //   titleError.value = 'Title is required.';
+      //   return;
+      // }
 
-      if (!community.value.author) {
-        authorError.value = 'Author is required.';
-        return;
-      }
+      // if (!community.value.author) {
+      //   authorError.value = 'Author is required.';
+      //   return;
+      // }
 
-      if (!community.value.content) {
-        contentError.value = 'Content is required.';
-        return;
-      }
+      // if (!community.value.content) {
+      //   contentError.value = 'Content is required.';
+      //   return;
+      // }
 
   try {
     const data = {
+      id: community.value.length + 1,
       author: community.value.author,
       title: community.value.title,
       content: community.value.content,
+      createDate: new Date().toISOString(),
     };
 
     const res = await axios.post('board', data);
     console.log('Saved:', res.data);
+          showModal.value = false;
+     const addRes = await axios.get("board");
+          console.log("get community = ", addRes.data);
+          community.value = addRes.data
+          
+
   } catch (error) {
     console.error('Error saving board:', error);
   }
@@ -81,26 +89,42 @@ const showModal = ref(false);
       </div>
 
       <!-- 테이블 -->
-      <table class="table table-hover community-table">
-        <thead>
-          <tr>
-            <th>번호</th>
-            <th>작성자</th>
-            <th>제목</th>
-            <th>내용</th>
-            <th>작성 날짜</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="board in community" :key="board.createDate">
-            <td>{{ board.id }}</td>
-            <td>{{ board.author }}</td>
-            <td>{{ board.title }}</td>
-            <td>{{ board.content }}</td>
-            <td>{{ new Date(board.createDate).toLocaleDateString() }}</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="container my-4" style="max-width: 800px;">
+    <div
+      v-for="board in community"
+      :key="board.createDate"
+      class="card mb-3 shadow-sm"
+      style="border-radius: 1rem;"
+    >
+    <div class="card-body p-3">
+      <!-- 제목과 날짜 -->
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <!-- 번호 표시 -->
+        <div>
+          <h5 class="card-title mb-0 text-truncate" >
+            {{ board.title }}
+          </h5>
+        </div>
+   
+         <div class="text-end mt-2">
+            <span class="badge bg-secondary">No. {{ board.id }}</span>
+          </div>
+      </div>
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <!-- 내용 -->
+        <p class="card-text" style="max-height: 80px; overflow: hidden; text-overflow: ellipsis;">
+          {{ board.content }}
+        </p>
+          <small class="text-muted">
+            {{ board.author }}
+            {{ new Date(board.createDate).toLocaleDateString() }}
+          </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     </div>
   </div>
 </div>
@@ -112,15 +136,15 @@ const showModal = ref(false);
         <h2>새 게시물 작성</h2>
         <label>
           제목:
-          <input v-model="title" type="text" />
+          <input v-model="community.title" type="text" />
         </label>
         <label>
           작성자:
-          <input v-model="author" type="text" />
+          <input v-model="community.author" type="text" />
         </label>
         <label>
           내용:
-          <textarea v-model="content"></textarea>
+          <textarea v-model="community.content"></textarea>
         </label>
         
         <div class="modal-buttons">
