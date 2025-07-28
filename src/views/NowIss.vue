@@ -64,7 +64,7 @@ onMounted(() => {
     }
 
     fetchISS();
-    const intervalId = setInterval(fetchISS, 60000); // 10초마다 업데이트
+    const intervalId = setInterval(fetchISS, 10000); // 10초마다 업데이트
 
     return () => {
       isConnected = false;
