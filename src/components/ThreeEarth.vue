@@ -1,11 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Scene, PerspectiveCamera, WebGLRenderer, SphereGeometry,
-  MeshBasicMaterial, Mesh, AmbientLight, PointLight
+   Mesh, AmbientLight, PointLight
   } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-// import * as THREE from 'three';
-
+import * as THREE from 'three';
+import earthImg from '@/assets/earth.png';
 
 
 defineProps({
@@ -37,13 +37,15 @@ const initRenderer = (canvas) => {
   return renderer;
 }
 
-  // const textureLoader = new THREE.TextureLoader();
-  // const earthTexture = textureLoader.load('/earth.png'); 
+  const textureLoader = new THREE.TextureLoader();
+  const earthTexture = textureLoader.load(earthImg); 
 
 const createEarth = () => {
   const geometry = new SphereGeometry(1, 64, 64);
-  const material = new MeshBasicMaterial({ color: '#141A2E' });
-  const mesh = new Mesh(geometry, material);
+const material = new THREE.MeshBasicMaterial({
+  map: earthTexture, 
+});
+const mesh = new Mesh(geometry, material);
   return mesh;
 }
 const setThree = () => {
@@ -66,7 +68,7 @@ const setThree = () => {
   controls.enableZoom = true;
   controls.enablePan = true;
   controls.enableRotate = true;
-  controls.autoRotate = true;
+  controls.autoRotate = false;
   controls.autoRotateSpeed = 0.5;
 
   const animate = () => {
@@ -93,33 +95,11 @@ onMounted(() => {
     사용자 위도: {{ userPosition.lat }}<br />
     사용자 경도: {{ userPosition.lng }}
     <hr />
-    iss 위도: {{ userPosition.lat }}<br />
-    iss 경도: {{ userPosition.lng }}
+    iss 위도: {{ issPosition.lat }}<br />
+    iss 경도: {{ issPosition.lng }}
 </div>
 
   <canvas ref="canvasRef"></canvas>
-   <!-- <div className="h-[400px] w-full">
-      <Canvas camera={{ position: [0, 0, 2.5], fov: 45 }}>
-        <Suspense fallback={null}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <Earth />
-          {position && (
-            <Marker lat={position.lat} lng={position.lng} color="#00ff9d" />
-          )}
-          {issLocation && (
-            <Marker lat={issLocation.lat} lng={issLocation.lng} color="#ff4d4d" size={0.03} />
-          )}
-          <OrbitControls
-            enableZoom={true}
-            enablePan={true}
-            enableRotate={true}
-            autoRotate={true}
-            autoRotateSpeed={0.5}
-          />
-        </Suspense>
-      </Canvas>
-    </div> -->
 </template>
 
 

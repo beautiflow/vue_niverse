@@ -37,40 +37,40 @@ onMounted(() => {
 const IssPosition = ref({ lat: null, lng: null});
 
 
-// onMounted(() => {
-//   let isConnected = true;
+onMounted(() => {
+  let isConnected = true;
     
-//     async function fetchISS() {
-//       try {
-//         const res = await fetch('https://api.wheretheiss.at/v1/satellites/25544');
-//         if (!res.ok) {
-//           throw new Error('ISS 위치 정보를 가져올 수 없습니다.');
-//         }
-//         const data = await res.json();
-//         if (isConnected) {
-//           IssPosition.value = { 
-//             lat: data.latitude, 
-//             lng: data.longitude }
-//         }
-//         console.log("iss lat = ", IssPosition.value.lat , " lng = ", IssPosition.value.lng);
+    async function fetchISS() {
+      try {
+        const res = await fetch('https://api.wheretheiss.at/v1/satellites/25544');
+        if (!res.ok) {
+          throw new Error('ISS 위치 정보를 가져올 수 없습니다.');
+        }
+        const data = await res.json();
+        if (isConnected) {
+          IssPosition.value = { 
+            lat: data.latitude, 
+            lng: data.longitude }
+        }
+        console.log("iss lat = ", IssPosition.value.lat , " lng = ", IssPosition.value.lng);
 
-//       } catch (error) {
-//         console.error("ISS Fetch Error:", error);
-//         if (isConnected) {
-//           console.error('ISS 위치 정보를 가져오는 데 실패했습니다.');
-//           issLoading.value = false;
-//         }
-//       }
-//     }
+      } catch (error) {
+        console.error("ISS Fetch Error:", error);
+        if (isConnected) {
+          console.error('ISS 위치 정보를 가져오는 데 실패했습니다.');
+          issLoading.value = false;
+        }
+      }
+    }
 
-//     fetchISS();
-//     const intervalId = setInterval(fetchISS, 10000); // 10초마다 업데이트
+    fetchISS();
+    const intervalId = setInterval(fetchISS, 60000); // 10초마다 업데이트
 
-//     return () => {
-//       isConnected = false;
-//       clearInterval(intervalId);
-//     };
-// })
+    return () => {
+      isConnected = false;
+      clearInterval(intervalId);
+    };
+})
 
 
 
@@ -100,9 +100,9 @@ const IssPosition = ref({ lat: null, lng: null});
                   👤 내 현재 위치: 위도 {{ userPosition.lat }}° / 경도 {{ userPosition.lng }}°
                 </p>
               </div>
-              <div v-if="issError">
+              <!-- <div v-if="issError">
                 <p class="text-center text-red-500">{{ issError }}</p>
-              </div>
+              </div> -->
             </div>
 
             <!-- Three.js 컴포넌트에 ISS 위치 전달 -->

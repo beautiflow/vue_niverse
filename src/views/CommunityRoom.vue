@@ -1,8 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from '@/axios';
+import { useRouter } from 'vue-router';
 
 import SideNavbar from '@/components/SideNavbar.vue';
+
+    const router = useRouter();
+
 const showModal = ref(false);
     const community = ref({
       id : '',
@@ -71,6 +75,17 @@ const showModal = ref(false);
   }
 };
 
+    const moveToPage = (boardId) => {
+      console.log(boardId);
+      // router.push('/todos/'+ todoId);
+      router.push({
+        name: 'boardDetail',
+        params: {
+          id: boardId
+        }
+      });
+    };
+
 
 </script>
 
@@ -96,10 +111,11 @@ const showModal = ref(false);
       class="card mb-3 shadow-sm"
       style="border-radius: 1rem;"
     >
-    <div class="card-body p-3">
-      <!-- 제목과 날짜 -->
+    <div 
+      class="card-body p-3"
+      style="cursor: pointer"
+      @click="moveToPage(board.id)">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <!-- 번호 표시 -->
         <div>
           <h5 class="card-title mb-0 text-truncate" >
             {{ board.title }}
@@ -111,7 +127,6 @@ const showModal = ref(false);
           </div>
       </div>
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <!-- 내용 -->
         <p class="card-text" style="max-height: 80px; overflow: hidden; text-overflow: ellipsis;">
           {{ board.content }}
         </p>
