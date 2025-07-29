@@ -1,20 +1,19 @@
 <script setup>
-import HelloWorld from '@/components/HelloWorld.vue'
-import HomeView from '@/views/HomeView.vue'
+import HelloWorld from '@/components/HelloWorld.vue';
+import HomeView from '@/views/HomeView.vue';
 </script>
 
 <template>
   <div class="container">
     <!-- 왼쪽 영역 -->
     <div class="left-panel">
-      <header>
+      <div>
         <img alt="Vue logo" class="logo" src="@/assets/earthLogo.jpg" width="125" height="125" />
         <div class="wrapper">
           <HelloWorld msg="You did it!" />
         </div>
-      </header>
+      </div>
     </div>
-
     <!-- 오른쪽 영역 -->
     <div class="right-panel">
       <HomeView />

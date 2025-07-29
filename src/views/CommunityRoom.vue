@@ -2,10 +2,9 @@
 import { ref, onMounted } from 'vue'
 import axios from '@/axios';
 import { useRouter } from 'vue-router';
-
 import SideNavbar from '@/components/SideNavbar.vue';
 
-    const router = useRouter();
+const router = useRouter();
 
 const showModal = ref(false);
     const community = ref({
@@ -18,26 +17,26 @@ const showModal = ref(false);
       
     });
 
-    const openModal = () => {
-      showModal.value = true;
-    };
+const openModal = () => {
+  showModal.value = true;
+};
 
-    const closeModal = () => {
-      showModal.value = false;
-    };
+const closeModal = () => {
+  showModal.value = false;
+};
 
-    onMounted(async() => {
-          const res = await axios.get("board");
-          console.log("get community = ", res.data);
-          community.value = res.data
+onMounted(async() => {
+      const res = await axios.get("board");
+      console.log("get community = ", res.data);
+      community.value = res.data
 
-    });
+});
 
-    // const titleError = ref('');
-    // const authorError = ref('');
-    // const contentError = ref('');
+// const titleError = ref('');
+// const authorError = ref('');
+// const contentError = ref('');
 
- const saveBoard = async () => {
+const saveBoard = async () => {
       // if (!community.value.title) {
       //   titleError.value = 'Title is required.';
       //   return;
@@ -61,90 +60,75 @@ const showModal = ref(false);
       content: community.value.content,
       createDate: new Date().toISOString(),
     };
-
     const res = await axios.post('board', data);
     console.log('Saved:', res.data);
-          showModal.value = false;
-     const addRes = await axios.get("board");
-          console.log("get community = ", addRes.data);
-          community.value = addRes.data
-          
-
+    showModal.value = false;
+    const addRes = await axios.get("board");
+    console.log("get community = ", addRes.data);
+    community.value = addRes.data;
   } catch (error) {
     console.error('Error saving board:', error);
   }
 };
 
-    const moveToPage = (boardId) => {
-      console.log(boardId);
-      // router.push('/todos/'+ todoId);
-      router.push({
-        name: 'boardDetail',
-        params: {
-          id: boardId
-        }
-      });
-    };
-
-
+const moveToPage = (boardId) => {
+  console.log(boardId);
+  // router.push('/todos/'+ todoId);
+  router.push({
+    name: 'boardDetail',
+    params: {
+      id: boardId
+    }
+  });
+};
 </script>
 
 <template>
-      <SideNavbar />
-<div>  
-<div class="container">
-    <!-- 페이지 타이틀 -->
-    <h1 class="title">community page</h1>
-
-    <!-- 버튼과 테이블 -->
-    <div class="table-section">
-      <!-- 버튼: 테이블 상단 오른쪽 정렬 -->
-      <div class="table-header">
-        <button @click="openModal" class="create-button">Create</button>
-      </div>
-
-      <!-- 테이블 -->
-  <div class="container my-4" style="max-width: 800px;">
-    <div
-      v-for="board in community"
-      :key="board.createDate"
-      class="card mb-3 shadow-sm"
-      style="border-radius: 1rem;"
-    >
-    <div 
-      class="card-body p-3"
-      style="cursor: pointer"
-      @click="moveToPage(board.id)">
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <div>
-          <h5 class="card-title mb-0 text-truncate" >
-            {{ board.title }}
-          </h5>
-        </div>
-   
-         <div class="text-end mt-2">
-            <span class="badge bg-secondary">No. {{ board.id }}</span>
+  <SideNavbar />
+  <div>  
+    <div class="container">
+      <h1 class="title">community page</h1>
+        <div class="table-section">
+          <div class="table-header">
+            <button @click="openModal" class="create-button">Create</button>
           </div>
-      </div>
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <p class="card-text" style="max-height: 80px; overflow: hidden; text-overflow: ellipsis;">
-          {{ board.content }}
-        </p>
-          <small class="text-muted">
-            {{ board.author }}
-            {{ new Date(board.createDate).toLocaleDateString() }}
-          </small>
-      </div>
+          <div class="container my-4" style="max-width: 800px;">
+              <div
+                v-for="board in community"
+                :key="board.createDate"
+                class="card mb-3 shadow-sm"
+                style="border-radius: 1rem;"
+              >
+                <div 
+                  class="card-body p-3"
+                  style="cursor: pointer"
+                  @click="moveToPage(board.id)">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <div>
+                        <h5 class="card-title mb-0 text-truncate" >
+                          {{ board.title }}
+                        </h5>
+                      </div>
+                      <div class="text-end mt-2">
+                          <span class="badge bg-secondary">No. {{ board.id }}</span>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <p class="card-text" style="max-height: 80px; overflow: hidden; text-overflow: ellipsis;">
+                        {{ board.content }}
+                      </p>
+                        <small class="text-muted">
+                          {{ board.author }}
+                          {{ new Date(board.createDate).toLocaleDateString() }}
+                        </small>
+                    </div>
+                </div>
+              </div>
+          </div>
+        </div>
     </div>
   </div>
-</div>
-
-
-    </div>
-  </div>
-</div>
-    
-
+      
     <!-- 모달 -->
     <div v-if="showModal" class="modal-backdrop">
       <div class="modal-content">
@@ -161,11 +145,9 @@ const showModal = ref(false);
           내용:
           <textarea v-model="community.content"></textarea>
         </label>
-        
         <div class="modal-buttons">
           <button class="btn btn-outline-dark" @click="closeModal">취소</button>
           <button class="btn btn-primary" @click="saveBoard">저장</button>
-
         </div>
       </div>
     </div>

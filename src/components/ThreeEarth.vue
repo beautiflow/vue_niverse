@@ -4,7 +4,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
 import earthImg from '@/assets/earth.png';
 
-
 const props = defineProps({
   userPosition: {
     type: Object,
@@ -15,9 +14,9 @@ const props = defineProps({
     required: true,
   }
 });
-let issMarker = null;
 
-const canvasRef = ref(null)
+let issMarker = null;
+const canvasRef = ref(null);
 
 const initScene = () => {
   const scene = new THREE.Scene();
@@ -25,7 +24,7 @@ const initScene = () => {
 }
 
 const initCamera = (sizes) => {
-  const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 100)
+  const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 100);
   camera.position.set(0, 0, 2.5);
   return camera;
 }
@@ -35,16 +34,16 @@ const initRenderer = (canvas) => {
   return renderer;
 }
 
-  const textureLoader = new THREE.TextureLoader();
-  const earthTexture = textureLoader.load(earthImg); 
+const textureLoader = new THREE.TextureLoader();
+const earthTexture = textureLoader.load(earthImg); 
 
 const createEarth = () => {
   const geometry = new THREE.SphereGeometry(0.8, 64, 64);
     // const material = new MeshBasicMaterial({ color: '#141A2E' });
-const material = new THREE.MeshBasicMaterial({
+  const material = new THREE.MeshBasicMaterial({
   map: earthTexture, 
-});
-const mesh = new THREE.Mesh(geometry, material);
+  });
+  const mesh = new THREE.Mesh(geometry, material);
   return mesh;
 }
 
@@ -59,7 +58,7 @@ const latLngToVector3 = (lat, lng, radius) => {
   return new THREE.Vector3(x, y, z);
 }
 
-  const createMarker = (position, color) => {
+const createMarker = (position, color) => {
   const geometry = new THREE.SphereGeometry(0.01, 16, 16);
   const material = new THREE.MeshStandardMaterial({ color });
   const marker = new THREE.Mesh(geometry, material);
@@ -119,17 +118,11 @@ watch(() => props.issPosition, (newPos) => {
     issMarker.position.set(newISS.x, newISS.y, newISS.z);
   }
 }, { deep: true });
-
-
 </script>
 
 <template>
-  <canvas ref="canvasRef">
-    
-  </canvas>
+  <canvas ref="canvasRef"></canvas>
 </template>
-
-
 
 <style scoped>
 canvas {
@@ -137,5 +130,4 @@ canvas {
   width: 100%;
   height: 100%;
 }
-
 </style>

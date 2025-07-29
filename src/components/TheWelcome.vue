@@ -1,7 +1,5 @@
 <script setup>
-import WelcomeItem from './WelcomeItem.vue'
-
-
+import WelcomeItem from './WelcomeItem.vue';
 </script>
 
 <template>

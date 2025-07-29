@@ -1,15 +1,12 @@
 <script setup>
 import SideNavbar from '@/components/SideNavbar.vue';
-
 </script>
 
 <template>
-      <SideNavbar />
+  <SideNavbar />
   <div>AboutEarth page</div>
 </template>
 
-
-
-<style>
+<style scoped>
 
 </style>

@@ -1,19 +1,15 @@
 <script setup>
-import {  RouterView } from 'vue-router'
-
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-
   <RouterView />
 </template>
 
 <style scoped>
 #app{
- 
   background-color: black; 
   color: white;            
-
 }
 
 header {
