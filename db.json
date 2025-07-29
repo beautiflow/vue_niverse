@@ -7,7 +7,7 @@
   ],
   "board": [
     {
-      "id": "1",
+      "id": 1,
       "author": "홍길동",
       "title": "test",
       "content": "test",
@@ -15,7 +15,7 @@
       "updateDate": "null"
     },
     {
-      "id": "2",
+      "id": 2,
       "author": "김철수",
       "title": "test",
       "content": "test",
@@ -23,12 +23,33 @@
       "updateDate": "2025-07-25T15:00:00Z"
     },
     {
-      "id": "3",
+      "id": 3,
       "author": "김영희",
       "title": "test",
       "content": "test",
       "createDate": "2025-07-25T14:33:00Z",
       "updateDate": "2025-07-25T15:00:00Z"
+    },
+    {
+      "id": 4,
+      "author": "wert",
+      "title": "wert",
+      "content": "wert",
+      "createDate": "2025-07-29T07:03:30.019Z"
+    },
+    {
+      "id": 5,
+      "author": "ㄷㄷ",
+      "title": "ㄷㄷ",
+      "content": "ㄷㄷ",
+      "createDate": "2025-07-29T07:16:19.457Z"
+    },
+    {
+      "id": 6,
+      "author": "23452",
+      "title": "2152",
+      "content": "4525",
+      "createDate": "2025-07-29T07:21:45.031Z"
     }
   ]
 }
