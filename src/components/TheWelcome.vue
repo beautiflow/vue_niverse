@@ -1,68 +1,16 @@
 <script setup>
 import WelcomeItem from './WelcomeItem.vue';
+import { MenuItems } from '@/constants/menu.js';
+
 </script>
 
 <template>
-  <WelcomeItem>
+    <WelcomeItem v-for="item in MenuItems" :key="item.id">
     <template #icon>
-      <i class="fa-solid fa-satellite"></i>        
+      <i :class='item.icon'></i>        
     </template>
     <template #heading>
-      <RouterLink to="/nowISS">Now ISS</RouterLink>
-    </template>
-
-  
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <i class="fa-regular fa-comments"></i>           
-    </template>
-
-    <template #heading>
-      <RouterLink to="/community">Community</RouterLink>
-    </template>
- 
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <i class="fa-solid fa-earth-asia"></i>         
-    </template>
-
-    <template #heading>
-      <RouterLink to="/aboutEarth">About Earth</RouterLink>
-    </template>
- 
-   
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <i class="fa-regular fa-star"></i>      
-    </template>
-    <template #heading>
-      <RouterLink to="/constellations">Constellations</RouterLink>
-    </template>
-    
-  </WelcomeItem>
-
-    <WelcomeItem>
-    <template #icon>
-      <i class="fa-solid fa-moon"></i>        
-    </template>
-    <template #heading>
-      <RouterLink to="/moonPhases">Moon Phases</RouterLink>
-    </template>
-    
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <i class="fa-solid fa-gear"></i>        
-    </template>
-    <template #heading>
-      <RouterLink to="/setting">Settings</RouterLink>
+      <RouterLink :to='item.route'>{{ item.label }}</RouterLink>
     </template>
   </WelcomeItem>
 </template>

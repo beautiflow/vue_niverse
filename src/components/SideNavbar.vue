@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import earth from '@/assets/earthLogo.jpg';
+import { MenuItems } from '@/constants/menu.js';
 
 const isCollapsed = ref(true);
 const isMenuActive = ref(false);
@@ -34,48 +35,16 @@ function toggleMenu() {
 
     <nav class="sidebar-nav">
       <!-- Primary top nav -->
-      <ul class="nav-list primary-nav">
+      <ul 
+        class="nav-list primary-nav"
+        v-for="item in MenuItems" :key="item.id"
+      >
         <li class="nav-item">
-          <RouterLink to="/nowISS" class="nav-link">
-              <i class="fa-solid fa-satellite"></i>        
-              <span class="nav-label">Now ISS</span>
+          <RouterLink :to='item.route' class="nav-link">
+              <i :class='item.icon'></i>        
+              <span class="nav-label"> {{ item.label }} </span>
           </RouterLink>
-          <span class="nav-tooltip">Now ISS</span>
-        </li>
-        <li class="nav-item">
-          <RouterLink to="/community" class="nav-link">
-              <i class="fa-regular fa-comments"></i>           
-              <span class="nav-label">Community</span>
-          </RouterLink>
-          <span class="nav-tooltip">Community</span>
-        </li>
-        <li class="nav-item">
-          <RouterLink to="/aboutEarth" class="nav-link">
-              <i class="fa-solid fa-earth-asia"></i>         
-              <span class="nav-label">About Earth</span>
-          </RouterLink>
-          <span class="nav-tooltip">About Earth</span>
-        </li>
-        <li class="nav-item">
-          <RouterLink to="/constellations" class="nav-link">
-              <i class="fa-regular fa-star"></i>      
-              <span class="nav-label">Constellations</span>
-          </RouterLink>
-          <span class="nav-tooltip">Constellations</span>
-        </li>
-           <li class="nav-item">
-          <RouterLink to="/moonPhases" class="nav-link">
-            <i class="fa-solid fa-moon"></i>        
-            <span class="nav-label">Moon Phases</span>
-          </RouterLink>
-          <span class="nav-tooltip">Moon Phases</span>
-        </li>
-        <li class="nav-item">
-          <RouterLink to="/settings" class="nav-link">
-            <i class="fa-solid fa-gear"></i>        
-            <span class="nav-label">Settings</span>
-          </RouterLink>
-          <span class="nav-tooltip">Settings</span>
+          <span class="nav-tooltip">{{ item.label }}</span>
         </li>
       </ul>
 
@@ -88,13 +57,6 @@ function toggleMenu() {
           </RouterLink>
           <span class="nav-tooltip">Profile</span>
         </li>
-        <!-- <li class="nav-item">
-          <RouterLink to="/logout" class="nav-link">
-            <i class="fa-solid fa-arrow-right-to-bracket"></i>     
-            <span class="nav-label">Logout</span>
-          </RouterLink>
-          <span class="nav-tooltip">Logout</span>
-        </li> -->
       </ul>
     </nav>
   </aside>
