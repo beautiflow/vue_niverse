@@ -3,6 +3,12 @@ import { ref } from 'vue';
 
 const emit = defineEmits(['closeModal', 'saveBoard'])
 
+
+const defaultBoard = {
+    title: '',
+    content: '',
+    author: '',
+}; 
 const onClose = () => {
   emit('closeModal');
 }
@@ -25,20 +31,18 @@ const saveBoard = () => {
     content: newBoard.value.content,
   });
 
-  newBoard.value.title = '';
-  newBoard.value.author = '';
-  newBoard.value.content = '';
+  emit('saveBoard', { 
+    ...newBoard.value
+  });
+
+  newBoard.value = {...defaultBoard};  
 }
 
 const props = defineProps({
   showModal: Boolean,
 })
 
- const newBoard = ref({
-      title: '',
-      content: '',
-      author: '',
-});
+ const newBoard = ref({...defaultBoard});
 
 </script>
 

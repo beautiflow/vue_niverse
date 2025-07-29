@@ -7,7 +7,7 @@ import Constellations from '@/views/ConstellationsRoom.vue';
 import MoonPhases from '@/views/MoonPhases.vue';
 import Settings from '@/views/Settings.vue';
 import Profile from '@/views/Profile.vue';
-// import communityDetail from ''
+import OpenLayersMap from '@/views/OpenLayersMap.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +26,11 @@ const router = createRouter({
       path: '/community',
       name: 'Community',
       component: Community,
+    },
+     {
+      path: '/openLayers',
+      name: 'OpenLayersMap',
+      component: OpenLayersMap,
     },
     {
       path: '/aboutEarth',

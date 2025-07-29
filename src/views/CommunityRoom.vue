@@ -30,7 +30,7 @@ const closeModal = () => {
 const saveBoard = async (newBoard) => {
   try {
     const data = {
-      id: community.value.length + 1,
+      id: community.value.length + 1,      
       author: newBoard.author,
       title: newBoard.title,
       content: newBoard.content,
@@ -73,37 +73,42 @@ const moveToPage = (boardId) => {
           <button @click="openModal" class="create-button">Create</button>
         </div>
         <div class="container my-4" style="max-width: 800px;">
-          <div
-            v-for="board in community"
-            :key="board.createDate"
-            class="card mb-3 shadow-sm"
-            style="border-radius: 1rem;"
-          >
-            <div 
-              class="card-body p-3"
-              style="cursor: pointer"
-              @click="moveToPage(board.id)">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <div>
-                  <h5 class="card-title mb-0 text-truncate" >
-                    {{ board.title }}
-                  </h5>
+          <template v-if="community.length > 0">
+            <div              
+              v-for="board in community"
+              :key="board.createDate"
+              class="card mb-3 shadow-sm"
+              style="border-radius: 1rem;"
+            >
+              <div 
+                class="card-body p-3"
+                style="cursor: pointer"
+                @click="moveToPage(board.id)">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div>
+                    <h5 class="card-title mb-0 text-truncate" >
+                      {{ board.title }}
+                    </h5>
+                  </div>
+                  <div class="text-end mt-2">
+                      <span class="badge bg-secondary">No. {{ board.id }}</span>
+                  </div>
                 </div>
-                <div class="text-end mt-2">
-                    <span class="badge bg-secondary">No. {{ board.id }}</span>
-                </div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <p class="card-text" style="max-height: 80px; overflow: hidden; text-overflow: ellipsis;">
-                  {{ board.content }}
-                </p>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <p class="card-text" style="max-height: 80px; overflow: hidden; text-overflow: ellipsis;">
+                    {{ board.content }}
+                  </p>
                   <small class="text-muted">
                     {{ board.author }}
                     {{ new Date(board.createDate).toLocaleDateString() }}
                   </small>
+                </div>
               </div>
             </div>
-          </div>
+          </template>
+          <template v-if="community.length === 0">
+            <div>검색 결과가 없습니다.</div>
+          </template>
         </div>
       </div>
     </div>
@@ -116,10 +121,10 @@ const moveToPage = (boardId) => {
       @saveBoard="saveBoard"
     />
   </teleport>
+
+  <CreateModal v-if="showModal" />
    
 </template>
-
-
 <style scoped>
 
 .container {
