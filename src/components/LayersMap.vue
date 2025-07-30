@@ -17,8 +17,10 @@ let map;
 let wmsLayer = null;
 let raster = null;
 let vector = null;
+let polygonLayer = null;
 const showWMS = ref(false); 
 const showWFS = ref(false); 
+const showMyGeo = ref(false); 
 
 // 기본 지도
 const defaultMap = {
@@ -26,7 +28,6 @@ const defaultMap = {
   zoom: 2,
 };
 
-console.log(defaultMap);
 
 // WMS 지도
 const onWMS = () => {
@@ -81,6 +82,42 @@ const onWFS = () => {
     map.removeLayer(vector);
     // map.setView(defaultMap);
     setViewPosition();
+  }
+}
+
+// geoServer 데이터 연동
+const onMyGeo = () => {
+    showMyGeo.value = !showMyGeo.value; 
+   if(showMyGeo.value){
+    polygonLayer = new ImageLayer({
+    source: new ImageWMS({
+      url: 'http://localhost:8080/geoserver/geoS/wms?service=WMS',
+      params : {
+          'VERSION' : '1.1.0', 
+          'LAYERS' : 'polygon', 
+          'BBOX' : [-71.1776820268866, 36.367316228570296, 127.38762693804684, 42.3903825660754], 
+          'SRS' : 'EPSG:3857', 
+          'FORMAT' : 'image/png'  
+        },
+            ratio: 1,
+
+      serverType: 'geoserver',
+    }),
+  });
+
+  console.log("polygonLayer = ", polygonLayer);
+   
+    setViewPosition({
+      center: fromLonLat([127.3905, 36.3705]),
+      zoom: 16,
+    });    
+    
+    map.addLayer(polygonLayer);
+  }else{
+    map.removeLayer(polygonLayer);
+    // map.setView(defaultMap);
+    setViewPosition();
+    polygonLayer = null;
   }
 }
 
@@ -144,6 +181,9 @@ onMounted (() => {
     </button>
     <button @click="onWFS" class="btn btn-primary ms-2 mb-2 ">    
         {{ showWFS ? 'Off WFS' : 'On WFS' }}
+    </button>
+    <button @click="onMyGeo" class="btn btn-dark ms-2 mb-2 ">    
+        {{ showMyGeo ? 'Off MyGeo' : 'On MyGeo' }}
     </button>
   </div>
   <div id='map-container'></div>
