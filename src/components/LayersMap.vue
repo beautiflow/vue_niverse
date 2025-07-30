@@ -21,10 +21,12 @@ const showWMS = ref(false);
 const showWFS = ref(false); 
 
 // 기본 지도
-const defaultMap = new View({
+const defaultMap = {
   center: fromLonLat([0, 0]), 
   zoom: 2,
-});
+};
+
+console.log(defaultMap);
 
 // WMS 지도
 const onWMS = () => {
@@ -39,18 +41,26 @@ const onWMS = () => {
       serverType: 'geoserver',
     }),
   });
-   const newView = new View({
+   
+    setViewPosition({
       center: [-10997148, 4569099],
       zoom: 4,
-    });
-    map.setView(newView);
+    });    
+    
     map.addLayer(wmsLayer);
   }else{
     map.removeLayer(wmsLayer);
-    map.setView(defaultMap);
+    // map.setView(defaultMap);
+    setViewPosition();
     wmsLayer = null;
   }
 };
+
+const setViewPosition = (options) => {
+  const mapView = map.getView();
+  mapView.setCenter(options?.center ? options.center : defaultMap.center);
+  mapView.setZoom(options?.zoom ? options.zoom : defaultMap.zoom)
+}
 
 // WFS 지도
 const onWFS = () => {
@@ -58,17 +68,19 @@ const onWFS = () => {
   if(showWFS.value){
     map.addLayer(raster);
     map.addLayer(vector);
-    const newView = new View({
-      center: [-8908887.277395891, 5381918.072437216],
-      maxZoom: 19,
-      zoom: 12,
-    });
-    map.setView(newView);
+    // const newView = new View({
+    //   center: [-8908887.277395891, 5381918.072437216],
+    //   maxZoom: 19,
+    //   zoom: 12,
+    // });
+    setViewPosition({center: [-8908887.277395891, 5381918.072437216], zoom: 12})
+    // map.setView(newView);
   }
   else{
     map.removeLayer(raster);
     map.removeLayer(vector);
-    map.setView(defaultMap);
+    // map.setView(defaultMap);
+    setViewPosition();
   }
 }
 
@@ -119,10 +131,7 @@ onMounted (() => {
         source: new OSM(),
       }),
     ],
-    view: new View({
-      center: fromLonLat([0, 0]),
-      zoom: 2,
-    }),
+    view: new View({...defaultMap}),
   });
 });
 
@@ -130,11 +139,11 @@ onMounted (() => {
 
 <template>
 <div>
-  <button @click="onWMS" class="btn btn-success mb-2">    
-      {{ showWMS ? 'Off WMS' : 'On WMS' }}
+    <button @click="onWMS" class="btn btn-success mb-2">    
+        {{ showWMS ? 'Off WMS' : 'On WMS' }}
     </button>
-  <button @click="onWFS" class="btn btn-primary ms-2 mb-2 ">    
-      {{ showWFS ? 'Off WFS' : 'On WFS' }}
+    <button @click="onWFS" class="btn btn-primary ms-2 mb-2 ">    
+        {{ showWFS ? 'Off WFS' : 'On WFS' }}
     </button>
   </div>
   <div id='map-container'></div>
