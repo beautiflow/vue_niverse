@@ -1,13 +1,13 @@
 {
   "visit": [
     {
-      "totalCount": 76,
+      "totalCount": 80,
       "id": "1"
     }
   ],
   "board": [
     {
-      "id": 1,
+      "id": "1",
       "author": "홍길동",
       "title": "test",
       "content": "test",
@@ -15,7 +15,7 @@
       "updateDate": "null"
     },
     {
-      "id": 2,
+      "id": "2",
       "author": "김철수",
       "title": "test",
       "content": "test",
@@ -23,7 +23,7 @@
       "updateDate": "2025-07-25T15:00:00Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "author": "김영희",
       "title": "test",
       "content": "test",
@@ -31,42 +31,42 @@
       "updateDate": "2025-07-25T15:00:00Z"
     },
     {
-      "id": 4,
+      "id": "4",
       "author": "test",
       "title": "test",
       "content": "test",
       "createDate": "2025-07-29T07:33:24.184Z"
     },
     {
-      "id": 5,
+      "id": "5",
       "author": "333",
       "title": "333",
       "content": "333",
       "createDate": "2025-07-29T07:52:20.773Z"
     },
     {
-      "id": 6,
+      "id": "6",
       "author": "t",
       "title": "t",
       "content": "t",
       "createDate": "2025-07-29T08:11:14.008Z"
     },
     {
-      "id": 6,
+      "id": "6",
       "author": "t",
       "title": "t",
       "content": "t",
       "createDate": "2025-07-29T08:11:14.009Z"
     },
     {
-      "id": 8,
+      "id": "8",
       "author": "t",
       "title": "t",
       "content": "t",
       "createDate": "2025-07-29T08:12:51.530Z"
     },
     {
-      "id": 8,
+      "id": "8",
       "author": "t",
       "title": "t",
       "content": "t",

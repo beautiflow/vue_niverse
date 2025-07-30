@@ -6,7 +6,7 @@ import Map from '@/components/LayersMap.vue';
 
 <template>
   <SideNavbar />
-  <h1>
+  <h1 style="text-align: center; font-weight: bold;">
     Open Layers Map
   </h1>
   <Map />
