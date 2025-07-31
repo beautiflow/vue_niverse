@@ -17,18 +17,28 @@ import { toggleWMS } from '@/utils/map/wmsLayer.js';
 import { toggleWFS } from '@/utils/map/wfsLayer.js';
 import { toggleMyGeoPolygon } from '@/utils/map/handlePolygon.js';
 import { toggleMyGeoPoint } from '@/utils/map/handlePoint.js';
+import ScaleLine from 'ol/control/ScaleLine.js';
 
 let map;
 let mousePositionControl; 
-const myGeoVectorRef = ref(null);
+let control;
 
 const showWMS = ref(false); 
 const showWFS = ref(false); 
 const showMyGeoPolygon = ref(false); 
 const showMyGeoPoint = ref(false); 
-const projection = ref('EPSG:4326')
-const precision = ref(4)
-const mousePositionTarget = ref(null)
+const projection = ref('EPSG:4326');
+const precision = ref(4);
+const mousePositionTarget = ref(null);
+const units = ref('metric');
+const type = ref('scaleline');
+const scaleBarOptionsContainer = ref(null);
+const unitsSelect = ref(null);
+const typeSelect = ref(null);
+const stepsRange = ref(null);
+const scaleTextCheckbox = ref(null);
+const invertColorsCheckbox = ref(null);
+const myGeoVectorRef = ref(null);
 
 // 기본 지도
 const defaultMap = {
@@ -62,8 +72,50 @@ const onMyGeoPoint = async () => {
     toggleMyGeoPoint(map, showMyGeoPoint, setViewPosition, myGeoVectorRef);
 }
 
+// control - scaleLine 
+const scaleControl = () => {
+  if (typeSelect.value === 'scaleline') {
+    control = new ScaleLine({
+      units: unitsSelect.value,
+    });
+    scaleBarOptionsContainer.value.style.display = 'none';
+  } else {
+    control = new ScaleLine({
+      units: unitsSelect.value,
+      bar: true,
+      steps: parseInt(stepsRange.value, 10),
+      text: scaleTextCheckbox.value.checked,
+      minWidth: 140,
+    });
+    onInvertColorsChange();
+scaleBarOptionsContainer.value?.style && (scaleBarOptionsContainer.value.style.display = 'block');
+  }
+  return control;
+}
+
+const onChangeUnit = () => {
+  control.setUnits(unitsSelect.value);
+}
+
+const reconfigureScaleLine = () => {
+  map.removeControl(control);
+  map.addControl(scaleControl());
+}
+
+const onInvertColorsChange = () => {
+control.element.classList.toggle(
+    'ol-scale-bar-inverted',
+    invertColorsCheckbox.value.checked,
+  );
+}
 
 onMounted (() => {
+  unitsSelect.value?.addEventListener('change', onChangeUnit);
+  typeSelect.value?.addEventListener('change', reconfigureScaleLine);
+  stepsRange.value?.addEventListener('input', reconfigureScaleLine);
+  scaleTextCheckbox.value?.addEventListener('change', reconfigureScaleLine);
+  invertColorsCheckbox.value?.addEventListener('change', onInvertColorsChange);
+
   mousePositionControl = new MousePosition({
     coordinateFormat: createStringXY(precision.value),
     projection: projection.value,
@@ -71,11 +123,13 @@ onMounted (() => {
     target: mousePositionTarget.value,
     undefinedHTML: '&nbsp;',
   });
+
   map =  new Map({
     target: 'map-container',
     controls: defaultControls().extend([
       new FullScreen(),
       new Rotate(),
+      scaleControl(),
       mousePositionControl,
     ]),
     interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
@@ -129,6 +183,26 @@ watch(precision, (newVal) => {
       <label for="precision">Precision</label>
       <input id="precision" type="number" min="0" max="12" v-model.number="precision" />
     </form>
+  <!-- control - scaleLine -->
+    <label for="units">Units:</label>
+    <select id="units" v-model="units">
+      <option value="degrees">degrees</option>
+      <option value="imperial">imperial inch</option>
+      <option value="us">us inch</option>
+      <option value="nautical">nautical mile</option>
+      <option value="metric">metric</option>
+    </select>
+    <label for="type">Type:</label>
+    <select id="type" ref="typeSelect" v-model="type">
+      <option value="scaleline">ScaleLine</option>
+      <option value="scalebar">ScaleBar</option>
+    </select>
+    <!-- <label for="steps">Steps:</label>
+    <input id="steps" type="range" ref="stepsRange" /> -->
+    <label for="showScaleText">Show scale text</label>
+    <input id="showScaleText" type="checkbox" ref="scaleTextCheckbox" />
+    <label for="invertColors">Invert colors</label>
+    <input id="invertColors" type="checkbox" ref="invertColorsCheckbox" />
 </template>
 
 
@@ -181,7 +255,7 @@ watch(precision, (newVal) => {
 /* control - mousePosition */
 .custom-mouse-position {
   position: absolute;
-  bottom: 110px;
+  bottom: 130px;
   left: 130px;
   background: rgba(255, 255, 255, 0.7);
   padding: 4px 8px;
@@ -190,6 +264,23 @@ watch(precision, (newVal) => {
   font-size: 12px;
    padding: 4px 12px;
   border-radius: 4px;
+}
+
+/* control - scaleLine */
+#scaleBarOptions {
+    display: none;
+}
+
+input[type=range] {
+  vertical-align: middle;
+}
+
+.ol-scale-bar-inverted .ol-scale-singlebar-even {
+  background-color: var(--ol-background-color);
+}
+
+.ol-scale-bar-inverted .ol-scale-singlebar-odd {
+  background-color: var(--ol-subtle-foreground-color);;
 }
 
 </style>
