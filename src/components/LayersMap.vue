@@ -3,7 +3,7 @@ import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import {Map, View} from 'ol';
 import {fromLonLat} from 'ol/proj';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import 'ol/ol.css';
 import ImageLayer from 'ol/layer/Image.js';
 import ImageWMS from 'ol/source/ImageWMS.js';
@@ -20,16 +20,25 @@ import FullScreen from 'ol/control/FullScreen.js';
 import {defaults as defaultControls} from 'ol/control/defaults.js';
 import ZoomSlider from 'ol/control/ZoomSlider.js';
 import axios from 'axios';
+import MousePosition from 'ol/control/MousePosition.js';
+import {createStringXY} from 'ol/coordinate.js';
+
 let map;
 let wmsLayer = null;
 let raster = null;
 let vector = null;
 let myGeoVector = null;
 let polygonLayer = null;
+let mousePositionControl; 
+
 const showWMS = ref(false); 
 const showWFS = ref(false); 
 const showMyGeoPolygon = ref(false); 
 const showMyGeoPoint = ref(false); 
+const projection = ref('EPSG:4326')
+const precision = ref(4)
+const mousePositionTarget = ref(null)
+
 const key = import.meta.env.VITE_MAP_TILER_KEY;
 const attributions =
   '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ' +
@@ -57,10 +66,10 @@ const onWMS = () => {
     }),
   });
    
-    setViewPosition({
-      center: [-10997148, 4569099],
-      zoom: 4,
-    });    
+  setViewPosition({
+    center: [-10997148, 4569099],
+    zoom: 4,
+  });    
     
     map.addLayer(wmsLayer);
   }else{
@@ -222,20 +231,38 @@ const addVectorLayer = async () => {
 }
 
 onMounted (() => {
+  mousePositionControl = new MousePosition({
+    coordinateFormat: createStringXY(precision.value),
+    projection: projection.value,
+    className: 'custom-mouse-position',
+    target: mousePositionTarget.value,
+    undefinedHTML: '&nbsp;',
+  });
   map =  new Map({
-      target: 'map-container',
-      controls: defaultControls().extend([new FullScreen()]),
-      layers: [
-        new TileLayer({
-          source: new OSM(),
-        }),
-      ],
-      view: new View({...defaultMap}),
-    });
-    const zoomslider = new ZoomSlider();
-    map.addControl(zoomslider);
-    addVectorLayer();
+    target: 'map-container',
+    controls: defaultControls().extend([
+      new FullScreen(),
+      mousePositionControl,
+    ]),
+    layers: [
+      new TileLayer({
+        source: new OSM(),
+      }),
+    ],
+    view: new View({...defaultMap}),
+  });
+  const zoomslider = new ZoomSlider();
+  map.addControl(zoomslider);
+  addVectorLayer();
 });
+
+watch(projection, (newVal) => {
+  mousePositionControl.setProjection(newVal)
+})
+
+watch(precision, (newVal) => {
+  mousePositionControl.setCoordinateFormat(createStringXY(newVal))
+})
 
 </script>
 
@@ -256,6 +283,19 @@ onMounted (() => {
   </div>
   <div id='map-container'>
   </div>
+  <!-- control - mousePosition -->
+  <div ref="mousePositionTarget" class="custom-mouse-position"></div>
+    <form>
+      <label for="projection">Projection </label>
+      <select id="projection" v-model="projection">
+        <option value="EPSG:4326">EPSG:4326</option>
+        <option value="EPSG:3857">EPSG:3857</option>
+      </select>
+
+      <label for="precision">Precision</label>
+      <input id="precision" type="number" min="0" max="12" v-model.number="precision" />
+    </form>
+
 </template>
 
 
@@ -304,4 +344,19 @@ onMounted (() => {
 #map-container .ol-zoom-out.ol-has-tooltip:focus [role=tooltip] {
   top: 232px;
 }
+
+/* control - mousePosition */
+.custom-mouse-position {
+  position: absolute;
+  bottom: 110px;
+  left: 130px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 4px 8px;
+  z-index: 1000;
+  min-width: 130px; 
+  font-size: 12px;
+   padding: 4px 12px;
+  border-radius: 4px;
+}
+
 </style>
