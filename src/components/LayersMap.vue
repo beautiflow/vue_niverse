@@ -22,6 +22,9 @@ import ZoomSlider from 'ol/control/ZoomSlider.js';
 import axios from 'axios';
 import MousePosition from 'ol/control/MousePosition.js';
 import {createStringXY} from 'ol/coordinate.js';
+import DragRotateAndZoom from 'ol/interaction/DragRotateAndZoom.js';
+import {defaults as defaultInteractions} from 'ol/interaction/defaults.js';
+import Rotate from 'ol/control/Rotate.js';
 
 let map;
 let wmsLayer = null;
@@ -43,8 +46,6 @@ const key = import.meta.env.VITE_MAP_TILER_KEY;
 const attributions =
   '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ' +
   '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>';
-
-
 
 // 기본 지도
 const defaultMap = {
@@ -242,8 +243,10 @@ onMounted (() => {
     target: 'map-container',
     controls: defaultControls().extend([
       new FullScreen(),
+      new Rotate(),
       mousePositionControl,
     ]),
+    interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
     layers: [
       new TileLayer({
         source: new OSM(),
@@ -284,18 +287,17 @@ watch(precision, (newVal) => {
   <div id='map-container'>
   </div>
   <!-- control - mousePosition -->
-  <div ref="mousePositionTarget" class="custom-mouse-position"></div>
+  <div ref="mousePositionTarget" class="custom-mouse-position">
+  </div>
     <form>
       <label for="projection">Projection </label>
       <select id="projection" v-model="projection">
         <option value="EPSG:4326">EPSG:4326</option>
         <option value="EPSG:3857">EPSG:3857</option>
       </select>
-
       <label for="precision">Precision</label>
       <input id="precision" type="number" min="0" max="12" v-model.number="precision" />
     </form>
-
 </template>
 
 
