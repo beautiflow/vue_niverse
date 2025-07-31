@@ -18,7 +18,7 @@ import Stroke from 'ol/style/Stroke';
 import CircleStyle from 'ol/style/Circle';
 import FullScreen from 'ol/control/FullScreen.js';
 import {defaults as defaultControls} from 'ol/control/defaults.js';
-
+import ZoomSlider from 'ol/control/ZoomSlider.js';
 import axios from 'axios';
 let map;
 let wmsLayer = null;
@@ -232,6 +232,8 @@ onMounted (() => {
       ],
       view: new View({...defaultMap}),
     });
+    const zoomslider = new ZoomSlider();
+    map.addControl(zoomslider);
     addVectorLayer();
 });
 
@@ -265,6 +267,7 @@ onMounted (() => {
   font-family: sans-serif;
 }
 
+/* control - fullScreen */
 .map-container:-webkit-full-screen {
   height: 100%;
   margin: 0;
@@ -274,5 +277,31 @@ onMounted (() => {
 } 
 .map-container .ol-rotate {
   top: 3em;
+}
+
+/* control - zoomSlider */
+#map-container .ol-zoom .ol-zoom-out {
+  margin-top: 200px;
+}
+#map-container .ol-zoomslider {
+  background-color: transparent;
+  top: calc(0.5em + 2px + 1px + 1.14 * 1.375em);
+}
+
+#map-container .ol-touch .ol-zoom .ol-zoom-out {
+  margin-top: 212px;
+}
+#map-container .ol-touch .ol-zoomslider {
+  top: 2.75em;
+}
+
+#map-container .ol-zoom-in.ol-has-tooltip:hover [role=tooltip],
+#map-container .ol-zoom-in.ol-has-tooltip:focus [role=tooltip] {
+  top: 3px;
+}
+
+#map-container .ol-zoom-out.ol-has-tooltip:hover [role=tooltip],
+#map-container .ol-zoom-out.ol-has-tooltip:focus [role=tooltip] {
+  top: 232px;
 }
 </style>
