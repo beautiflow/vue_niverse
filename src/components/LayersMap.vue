@@ -16,6 +16,8 @@ import Style from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
 import CircleStyle from 'ol/style/Circle';
+import FullScreen from 'ol/control/FullScreen.js';
+import {defaults as defaultControls} from 'ol/control/defaults.js';
 
 import axios from 'axios';
 let map;
@@ -28,6 +30,11 @@ const showWMS = ref(false);
 const showWFS = ref(false); 
 const showMyGeoPolygon = ref(false); 
 const showMyGeoPoint = ref(false); 
+const key = import.meta.env.VITE_MAP_TILER_KEY;
+const attributions =
+  '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ' +
+  '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>';
+
 
 
 // 기본 지도
@@ -180,11 +187,6 @@ const vectorSource = new VectorSource({
   },
 });
 
-const key = import.meta.env.VITE_MAP_TILER_KEY;
-const attributions =
-  '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ' +
-  '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>';
-
  raster = new TileLayer({
   source: new ImageTile({
     attributions: attributions,
@@ -220,22 +222,23 @@ const addVectorLayer = async () => {
 }
 
 onMounted (() => {
- map =  new Map({
-    target: 'map-container',
-    layers: [
-      new TileLayer({
-        source: new OSM(),
-      }),
-    ],
-    view: new View({...defaultMap}),
-  });
-  addVectorLayer();
+  map =  new Map({
+      target: 'map-container',
+      controls: defaultControls().extend([new FullScreen()]),
+      layers: [
+        new TileLayer({
+          source: new OSM(),
+        }),
+      ],
+      view: new View({...defaultMap}),
+    });
+    addVectorLayer();
 });
 
 </script>
 
 <template>
-<div>
+  <div>
     <button @click="onWMS" class="btn btn-success mb-2">    
         {{ showWMS ? 'Off WMS' : 'On WMS' }}
     </button>
@@ -249,9 +252,8 @@ onMounted (() => {
         {{ showMyGeoPoint ? 'Off MyGeoPoint' : 'On MyGeoPoint' }}
     </button>
   </div>
-  <div id='map-container'></div>
-  <div>
-</div>
+  <div id='map-container'>
+  </div>
 </template>
 
 
@@ -261,5 +263,16 @@ onMounted (() => {
   height: 80vh;
   width: 100%;
   font-family: sans-serif;
+}
+
+.map-container:-webkit-full-screen {
+  height: 100%;
+  margin: 0;
+}
+.map-container:fullscreen {
+  height: 100%;
+} 
+.map-container .ol-rotate {
+  top: 3em;
 }
 </style>
