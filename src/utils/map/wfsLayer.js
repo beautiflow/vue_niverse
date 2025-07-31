@@ -1,5 +1,4 @@
 import TileLayer from 'ol/layer/Tile';
-import { ref } from 'vue';
 import 'ol/ol.css';
 import GeoJSON from 'ol/format/GeoJSON.js';
 import VectorLayer from 'ol/layer/Vector.js';
@@ -9,8 +8,6 @@ import VectorSource from 'ol/source/Vector.js'
 
 let raster = null;
 let vector = null;
-
-const showWFS = ref(false); 
 
 const key = import.meta.env.VITE_MAP_TILER_KEY;
 const attributions =

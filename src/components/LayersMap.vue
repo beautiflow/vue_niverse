@@ -18,10 +18,14 @@ import { toggleWFS } from '@/utils/map/wfsLayer.js';
 import { toggleMyGeoPolygon } from '@/utils/map/handlePolygon.js';
 import { toggleMyGeoPoint } from '@/utils/map/handlePoint.js';
 import ScaleLine from 'ol/control/ScaleLine.js';
+import OverviewMap from 'ol/control/OverviewMap.js';
 
 let map;
 let mousePositionControl; 
+let overviewMapControl;
 let control;
+
+const key = import.meta.env.VITE_MAP_THUNDERFOREST_KEY;
 
 const showWMS = ref(false); 
 const showWFS = ref(false); 
@@ -59,7 +63,7 @@ const setViewPosition = (options) => {
 
 // WFS 지도
 const onWFS = () => {
-    toggleWFS(map, showWFS, setViewPosition);
+    toggleWFS(map, showWFS, setViewPosition, key);
 }
 
 // geoServer 데이터 연동 - POLYGON
@@ -124,6 +128,22 @@ onMounted (() => {
     undefinedHTML: '&nbsp;',
   });
 
+  overviewMapControl = new OverviewMap({
+  className: 'ol-overviewmap ol-custom-overviewmap',
+  layers: [
+    new TileLayer({
+      source: new OSM({
+        'url':
+          'https://{a-c}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png' +
+          '?apikey='+key,
+      }),
+    }),
+  ],
+  collapseLabel: '\u00BB',
+  label: '\u00AB',
+  collapsed: false,
+  });
+
   map =  new Map({
     target: 'map-container',
     controls: defaultControls().extend([
@@ -131,8 +151,9 @@ onMounted (() => {
       new Rotate(),
       scaleControl(),
       mousePositionControl,
+      overviewMapControl,
     ]),
-    interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
+    interactions: defaultInteractions().extend([new DragRotateAndZoom(), new DragRotateAndZoom()]),
     layers: [
       new TileLayer({
         source: new OSM(),
@@ -145,12 +166,12 @@ onMounted (() => {
 });
 
 watch(projection, (newVal) => {
-  mousePositionControl.setProjection(newVal)
-})
+  mousePositionControl.setProjection(newVal);
+});
 
 watch(precision, (newVal) => {
-  mousePositionControl.setCoordinateFormat(createStringXY(newVal))
-})
+  mousePositionControl.setCoordinateFormat(createStringXY(newVal));
+});
 
 </script>
 
@@ -262,7 +283,7 @@ watch(precision, (newVal) => {
   z-index: 1000;
   min-width: 130px; 
   font-size: 12px;
-   padding: 4px 12px;
+  padding: 4px 12px;
   border-radius: 4px;
 }
 
@@ -281,6 +302,45 @@ input[type=range] {
 
 .ol-scale-bar-inverted .ol-scale-singlebar-odd {
   background-color: var(--ol-subtle-foreground-color);;
+}
+
+/* control - overviewMap */
+.map-container .ol-custom-overviewmap,
+.map-container .ol-custom-overviewmap.ol-uncollapsible {
+  bottom: auto;
+  left: auto;
+  right: 0;
+  top: 0;
+}
+
+.map-container .ol-custom-overviewmap:not(.ol-collapsed)  {
+  border: 1px solid black;
+}
+
+.map-container .ol-custom-overviewmap .ol-overviewmap-map {
+  border: none;
+  width: 300px;
+}
+
+.map-container .ol-custom-overviewmap .ol-overviewmap-box {
+  border: 2px solid red;
+}
+
+.map-container .ol-custom-overviewmap:not(.ol-collapsed) button{
+  bottom: auto;
+  left: auto;
+  right: 1px;
+  top: 1px;
+}
+
+.map-container .ol-rotate {
+  top: 170px;
+  right: 0;
+}
+
+.ol-overviewmap {
+  left: 0.5em;
+  bottom: 0.5em;
 }
 
 </style>
