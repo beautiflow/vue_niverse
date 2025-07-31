@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from '@/axios';
+import {getJsonAxios} from '@/axios';
 import { useRouter } from 'vue-router';
 import SideNavbar from '@/components/SideNavbar.vue';
 import CreateModal from '@/components/CreateCommunity.vue';
@@ -36,10 +36,10 @@ const saveBoard = async (newBoard) => {
       content: newBoard.content,
       createDate: new Date().toISOString(),
     };
-    const res = await axios.post('board', data);
+    const res = await getJsonAxios.post('board', data);
     console.log('Saved:', res.data);
     showModal.value = false;
-    const addRes = await axios.get("board");
+    const addRes = await getJsonAxios.get("board");
     community.value = addRes.data;
   } catch (error) {
     console.error('Error saving board:', error);
@@ -47,7 +47,7 @@ const saveBoard = async (newBoard) => {
 };
 
 onMounted(async() => {
-      const res = await axios.get("board");
+      const res = await getJsonAxios.get("board");
       community.value = res.data
 });
 

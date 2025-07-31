@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from '@/axios';
+import {getJsonAxios} from '@/axios';
 
 defineProps({
   msg: {
@@ -13,10 +13,10 @@ const totalCount = ref(0);
 
 onMounted(async () => {
   try {
-    const res = await axios.get("visit/1");
+    const res = await getJsonAxios.get("visit/1");
     const newCount = res.data.totalCount + 1;
 
-    await axios.put("visit/1", {
+    await getJsonAxios.put("visit/1", {
       totalCount: newCount
     });
      totalCount.value = newCount; 

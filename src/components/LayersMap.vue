@@ -12,22 +12,29 @@ import VectorLayer from 'ol/layer/Vector.js';
 import {bbox as bboxStrategy} from 'ol/loadingstrategy.js';
 import ImageTile from 'ol/source/ImageTile.js';
 import VectorSource from 'ol/source/Vector.js';
+import Style from 'ol/style/Style';
+import Fill from 'ol/style/Fill';
+import Stroke from 'ol/style/Stroke';
+import CircleStyle from 'ol/style/Circle';
 
+import axios from 'axios';
 let map;
 let wmsLayer = null;
 let raster = null;
 let vector = null;
+let myGeoVector = null;
 let polygonLayer = null;
 const showWMS = ref(false); 
 const showWFS = ref(false); 
-const showMyGeo = ref(false); 
+const showMyGeoPolygon = ref(false); 
+const showMyGeoPoint = ref(false); 
+
 
 // 기본 지도
 const defaultMap = {
   center: fromLonLat([0, 0]), 
   zoom: 2,
 };
-
 
 // WMS 지도
 const onWMS = () => {
@@ -51,7 +58,6 @@ const onWMS = () => {
     map.addLayer(wmsLayer);
   }else{
     map.removeLayer(wmsLayer);
-    // map.setView(defaultMap);
     setViewPosition();
     wmsLayer = null;
   }
@@ -69,26 +75,20 @@ const onWFS = () => {
   if(showWFS.value){
     map.addLayer(raster);
     map.addLayer(vector);
-    // const newView = new View({
-    //   center: [-8908887.277395891, 5381918.072437216],
-    //   maxZoom: 19,
-    //   zoom: 12,
-    // });
     setViewPosition({center: [-8908887.277395891, 5381918.072437216], zoom: 12})
-    // map.setView(newView);
   }
   else{
     map.removeLayer(raster);
     map.removeLayer(vector);
-    // map.setView(defaultMap);
     setViewPosition();
   }
 }
 
-// geoServer 데이터 연동
-const onMyGeo = () => {
-    showMyGeo.value = !showMyGeo.value; 
-   if(showMyGeo.value){
+// geoServer 데이터 연동 - POLYGON
+const onMyGeoPolygon = () => {
+  showMyGeoPolygon.value = !showMyGeoPolygon.value; 
+   if(showMyGeoPolygon.value){
+    // POLYGON DATA
     polygonLayer = new ImageLayer({
     source: new ImageWMS({
       url: 'http://localhost:8080/geoserver/geoS/wms?service=WMS',
@@ -104,14 +104,11 @@ const onMyGeo = () => {
       serverType: 'geoserver',
     }),
   });
-
   console.log("polygonLayer = ", polygonLayer);
-   
-    setViewPosition({
-      center: fromLonLat([127.3905, 36.3705]),
-      zoom: 16,
-    });    
-    
+  setViewPosition({
+    center: fromLonLat([127.3905, 36.3705]),
+    zoom: 16,
+  });    
     map.addLayer(polygonLayer);
   }else{
     map.removeLayer(polygonLayer);
@@ -121,6 +118,44 @@ const onMyGeo = () => {
   }
 }
 
+// geoServer 데이터 연동 - POINT
+const onMyGeoPoint = async () => {
+  showMyGeoPoint.value = !showMyGeoPoint.value;
+  if(showMyGeoPoint.value){
+    console.log(showMyGeoPoint.value);
+    const response = await axios.get('/geoserver/geoS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geoS%3Apoint&outputFormat=application%2Fjson');
+    console.log(response);
+    const vectorSource2 = new VectorSource({
+      features: new GeoJSON().readFeatures(response.data, {
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+      }),
+    })
+    myGeoVector = new VectorLayer({
+      source: vectorSource2,
+      style: new Style({
+        image: new CircleStyle({
+        radius: 6,
+        fill: new Fill({ color: 'rgba(255, 255, 0, 1)' }),
+        stroke: new Stroke({ color: '#ff0000', width: 2 })
+      })
+    })
+  });
+  map.addLayer(myGeoVector);
+  console.log("MYgeo Vector", myGeoVector);
+  setViewPosition({
+      center: fromLonLat([127.3905, 36.3705]),
+      zoom: 16,
+    });  
+  }else{
+    console.log(showMyGeoPoint.value);
+    map.removeLayer(myGeoVector);
+    setViewPosition();
+  }
+}
+
+
+// WFS
 const vectorSource = new VectorSource({
   format: new GeoJSON(),
   url: function (extent) {
@@ -159,6 +194,30 @@ const attributions =
   }),
 });
 
+const addVectorLayer = async () => {
+  const response = await axios.get('/geoserver/geoS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geoS%3Apoint&outputFormat=application%2Fjson');
+  console.log(response);
+
+  const vectorSource2 = new VectorSource({
+    features: new GeoJSON().readFeatures(response.data, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:3857'
+    }),
+  })
+  const pointVectorLayer =new VectorLayer({
+    source: vectorSource2,
+    style: new Style({
+        fill: new Fill({
+          color: 'rgba(255, 0, 0, 1)',
+        }),
+        stroke: new Stroke({
+          color: '#ff0000',
+          width: 3,
+        }),
+      }),
+  });
+  map.addLayer(pointVectorLayer);
+}
 
 onMounted (() => {
  map =  new Map({
@@ -170,6 +229,7 @@ onMounted (() => {
     ],
     view: new View({...defaultMap}),
   });
+  addVectorLayer();
 });
 
 </script>
@@ -182,8 +242,11 @@ onMounted (() => {
     <button @click="onWFS" class="btn btn-primary ms-2 mb-2 ">    
         {{ showWFS ? 'Off WFS' : 'On WFS' }}
     </button>
-    <button @click="onMyGeo" class="btn btn-dark ms-2 mb-2 ">    
-        {{ showMyGeo ? 'Off MyGeo' : 'On MyGeo' }}
+    <button @click="onMyGeoPolygon" class="btn btn-dark ms-2 mb-2 ">    
+        {{ showMyGeoPolygon ? 'Off MyGeoPolygon' : 'On MyGeoPolygon' }}
+    </button>
+    <button @click="onMyGeoPoint" class="btn btn-danger ms-2 mb-2 ">    
+        {{ showMyGeoPoint ? 'Off MyGeoPoint' : 'On MyGeoPoint' }}
     </button>
   </div>
   <div id='map-container'></div>
