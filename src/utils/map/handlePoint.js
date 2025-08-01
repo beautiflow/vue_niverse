@@ -23,7 +23,7 @@ export async function toggleMyGeoPoint(map, showMyGeoPoint, setViewPosition, myG
       style: new Style({
         image: new CircleStyle({
           radius: 6,
-          fill: new Fill({ color: 'rgba(255, 255, 0, 1)' }),
+          fill: new Fill({ color: 'rgba(255, 0, 0, 1)' }),
           stroke: new Stroke({ color: '#ff0000', width: 2 })
         })
       }),

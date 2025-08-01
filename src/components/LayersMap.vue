@@ -2,7 +2,7 @@
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import {Map, View} from 'ol';
-import {fromLonLat} from 'ol/proj';
+import {fromLonLat, get  } from 'ol/proj'; 
 import { ref, onMounted, watch } from 'vue';
 import 'ol/ol.css';
 import FullScreen from 'ol/control/FullScreen.js';
@@ -19,11 +19,18 @@ import { toggleMyGeoPolygon } from '@/utils/map/handlePolygon.js';
 import { toggleMyGeoPoint } from '@/utils/map/handlePoint.js';
 import ScaleLine from 'ol/control/ScaleLine.js';
 import OverviewMap from 'ol/control/OverviewMap.js';
+import VectorLayer from 'ol/layer/Vector.js';
+import VectorSource from 'ol/source/Vector.js';
+import Draw from 'ol/interaction/Draw.js';
+import Modify from 'ol/interaction/Modify.js';
+import Snap from 'ol/interaction/Snap.js';
+import { Style,  Circle as CircleStyle, Fill, Stroke } from 'ol/style';
 
 let map;
 let mousePositionControl; 
 let overviewMapControl;
 let control;
+let draw, snap; 
 
 const key = import.meta.env.VITE_MAP_THUNDERFOREST_KEY;
 
@@ -43,6 +50,7 @@ const stepsRange = ref(null);
 const scaleTextCheckbox = ref(null);
 const invertColorsCheckbox = ref(null);
 const myGeoVectorRef = ref(null);
+const drawType = ref('Point');
 
 // 기본 지도
 const defaultMap = {
@@ -113,6 +121,53 @@ control.element.classList.toggle(
   );
 }
 
+// interaction - draw and modify features
+const drawRaster = new TileLayer({
+  source: new OSM(),
+});
+
+const source = new VectorSource();
+const drawVector = new VectorLayer({
+  source: source,
+  style: new Style({
+    image: new CircleStyle({
+      radius: 7, 
+      fill: new Fill({ color: 'rgba(255, 0, 0, 0.1)' }),
+      stroke: new Stroke({
+        color: '#ff0000', 
+        width: 2, 
+      }),
+    }),
+    fill: new Fill({ color: 'rgba(255, 0, 0, 0.1)' }),
+    stroke: new Stroke({
+      color: '#ff0000',
+      width: 2, 
+    }),
+  }),
+});
+
+const extent = get(projection.value).getExtent().slice();
+extent[0] += extent[0];
+extent[2] += extent[2];
+
+const modify = new Modify({source: source});
+const addInteractions = () => {
+  if (!map || !drawType.value) {
+    console.log('Map or drawType is not ready.');
+    return;
+  }
+  draw = new Draw({
+  source: source, 
+  type: drawType.value, 
+  });
+  map.addInteraction(draw);
+
+  snap = new Snap({ source: source }); 
+  map.addInteraction(snap);
+  map.addInteraction(modify);
+};
+
+
 onMounted (() => {
   unitsSelect.value?.addEventListener('change', onChangeUnit);
   typeSelect.value?.addEventListener('change', reconfigureScaleLine);
@@ -153,16 +208,19 @@ onMounted (() => {
       mousePositionControl,
       overviewMapControl,
     ]),
-    interactions: defaultInteractions().extend([new DragRotateAndZoom(), new DragRotateAndZoom()]),
+    interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
     layers: [
       new TileLayer({
         source: new OSM(),
       }),
-    ],
+      drawRaster, drawVector 
+      ],
     view: new View({...defaultMap}),
   });
   const zoomslider = new ZoomSlider();
   map.addControl(zoomslider);
+  map.addInteraction(modify);
+  addInteractions(); 
 });
 
 watch(projection, (newVal) => {
@@ -171,6 +229,12 @@ watch(projection, (newVal) => {
 
 watch(precision, (newVal) => {
   mousePositionControl.setCoordinateFormat(createStringXY(newVal));
+});
+
+watch(drawType, () => {
+    map.removeInteraction(draw);
+    map.removeInteraction(snap);
+    addInteractions();
 });
 
 </script>
@@ -224,6 +288,17 @@ watch(precision, (newVal) => {
     <input id="showScaleText" type="checkbox" ref="scaleTextCheckbox" />
     <label for="invertColors">Invert colors</label>
     <input id="invertColors" type="checkbox" ref="invertColorsCheckbox" />
+    <!-- interaction - draw and modify features -->
+    <form>
+      <label for="drawType">Geometry type &nbsp;</label>
+      <select id="drawType" v-model="drawType">
+        <option value="">-- 도형 타입 선택 --</option>
+        <option value="Point">Point</option>
+        <option value="LineString">LineString</option>
+        <option value="Polygon">Polygon</option>
+        <option value="Circle">Circle</option>
+      </select>
+    </form>
 </template>
 
 
@@ -280,7 +355,7 @@ watch(precision, (newVal) => {
   left: 130px;
   background: rgba(255, 255, 255, 0.7);
   padding: 4px 8px;
-  z-index: 1000;
+  z-index: 10;
   min-width: 130px; 
   font-size: 12px;
   padding: 4px 12px;
