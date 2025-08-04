@@ -27,7 +27,7 @@ export function initTranslate() {
 export function toggleTranslate(map, showTranslate, setViewPosition){
     showTranslate.value = !showTranslate.value;
     if(showTranslate.value){
-         initTranslate();
+        initTranslate();
         map.addInteraction(select);
         map.addInteraction(translate);
         map.addLayer(vector);
