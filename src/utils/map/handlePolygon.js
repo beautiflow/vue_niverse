@@ -23,8 +23,6 @@ export function toggleMyGeoPolygon(map, showPolygonRef, setViewPosition) {
       }),
     });
 
-    console.log("polygonLayer = ", polygonLayer);
-
     setViewPosition({
       center: fromLonLat([127.3905, 36.3705]),
       zoom: 16,

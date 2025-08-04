@@ -17,6 +17,8 @@ import { toggleWMS } from '@/utils/map/wmsLayer.js';
 import { toggleWFS } from '@/utils/map/wfsLayer.js';
 import { toggleMyGeoPolygon } from '@/utils/map/handlePolygon.js';
 import { toggleMyGeoPoint } from '@/utils/map/handlePoint.js';
+import { toggleTranslate }  from '@/utils/map/handleTranslate.js';
+
 import ScaleLine from 'ol/control/ScaleLine.js';
 import OverviewMap from 'ol/control/OverviewMap.js';
 import VectorLayer from 'ol/layer/Vector.js';
@@ -25,11 +27,6 @@ import Draw from 'ol/interaction/Draw.js';
 import Modify from 'ol/interaction/Modify.js';
 import Snap from 'ol/interaction/Snap.js';
 import { Style,  Circle as CircleStyle, Fill, Stroke } from 'ol/style';
-// import {unByKey} from 'ol/Observable.js';
-// import Overlay from 'ol/Overlay.js';
-// import LineString from 'ol/geom/LineString.js';
-// import Polygon from 'ol/geom/Polygon.js';
-// import {getArea, getLength} from 'ol/sphere.js';
 
 let map;
 let mousePositionControl; 
@@ -43,6 +40,8 @@ const showWMS = ref(false);
 const showWFS = ref(false); 
 const showMyGeoPolygon = ref(false); 
 const showMyGeoPoint = ref(false); 
+const showTranslate = ref(false); 
+
 const projection = ref('EPSG:4326');
 const precision = ref(4);
 const mousePositionTarget = ref(null);
@@ -53,7 +52,6 @@ const scaleTextCheckbox = ref(null);
 const invertColorsCheckbox = ref(null);
 const myGeoVectorRef = ref(null);
 const drawType = ref('');
-// const measureType = ref('');
 
 // 기본 지도
 const defaultMap = {
@@ -85,6 +83,11 @@ const onMyGeoPolygon = () => {
 // geoServer 데이터 연동 - POINT
 const onMyGeoPoint = async () => {
     toggleMyGeoPoint(map, showMyGeoPoint, setViewPosition, myGeoVectorRef);
+}
+
+// interaction - translate
+const onTranslate = () => {
+  toggleTranslate(map, showTranslate, setViewPosition);
 }
 
 // control - scaleLine 
@@ -172,32 +175,6 @@ const addInteractions = () => {
   map.addInteraction(modify);
 };
 
-// interaction - measure
-// const measureRaster = new TileLayer({
-//   source: new OSM(),
-// });
-
-// const measureSource = new VectorSource();
-
-
-
-// const measureVector = new VectorLayer({
-//   source: measureSource,
-//   style: {
-//     'fill-color': 'rgba(255, 255, 255, 0.2)',
-//     'stroke-color': '#ffcc33',
-//     'stroke-width': 2,
-//     'circle-radius': 7,
-//     'circle-fill-color': '#ffcc33',
-//   },
-// });
-
-
-
-
-
-
-
 onMounted (() => {
   mousePositionControl = new MousePosition({
     coordinateFormat: createStringXY(precision.value),
@@ -238,7 +215,6 @@ onMounted (() => {
         source: new OSM(),
       }),
       drawRaster, drawVector,
-      // measureRaster, measureVector
       ],
     view: new View({...defaultMap}),
   });
@@ -246,6 +222,7 @@ onMounted (() => {
   map.addControl(zoomslider);
   map.addInteraction(modify);
   addInteractions(); 
+
 });
 
 watch(projection, (newVal) => {
@@ -262,10 +239,6 @@ watch(drawType, () => {
     addInteractions();
 });
 
-// watch(measureType, () => {
-  
-// })
-
 </script>
 
 <template>
@@ -281,6 +254,9 @@ watch(drawType, () => {
     </button>
     <button @click="onMyGeoPoint" class="btn btn-danger ms-2 mb-2 ">    
         {{ showMyGeoPoint ? 'Off MyGeoPoint' : 'On MyGeoPoint' }}
+    </button>
+     <button @click="onTranslate" class="btn btn-warning ms-2 mb-2 ">    
+        {{ showTranslate ? 'Off Translate' : 'On Translate' }}
     </button>
   </div>
   <div id='map-container'>
@@ -326,14 +302,7 @@ watch(drawType, () => {
         <option value="Circle">Circle</option>
       </select>
     </form>
-    <!-- interaction - measure -->
-      <!-- <form class="measure-form">
-      <label for="measureType">Measurement type &nbsp;</label>
-      <select id="measureType" v-model="measureType" @change="addInteraction">
-        <option value="length">Length (LineString)</option>
-        <option value="area">Area (Polygon)</option>
-      </select>
-    </form> -->
+  
 </template>
 
 
@@ -452,42 +421,5 @@ input[type=range] {
   left: 0.5em;
   bottom: 0.5em;
 }
-
-/* interaction - measure */
-  /* .ol-tooltip {
-  position: relative;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 4px;
-  color: white;
-  padding: 4px 8px;
-  opacity: 0.7;
-  white-space: nowrap;
-  font-size: 12px;
-  cursor: default;
-  user-select: none;
-}
-.ol-tooltip-measure {
-  opacity: 1;
-  font-weight: bold;
-}
-.ol-tooltip-static {
-  background-color: #ffcc33;
-  color: black;
-  border: 1px solid white;
-}
-.ol-tooltip-measure:before,
-.ol-tooltip-static:before {
-  border-top: 6px solid rgba(0, 0, 0, 0.5);
-  border-right: 6px solid transparent;
-  border-left: 6px solid transparent;
-  content: "";
-  position: absolute;
-  bottom: -6px;
-  margin-left: -7px;
-  left: 50%;
-}
-.ol-tooltip-static:before {
-  border-top-color: #ffcc33;
-} */
 
 </style>
