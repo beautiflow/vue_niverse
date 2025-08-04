@@ -25,6 +25,11 @@ import Draw from 'ol/interaction/Draw.js';
 import Modify from 'ol/interaction/Modify.js';
 import Snap from 'ol/interaction/Snap.js';
 import { Style,  Circle as CircleStyle, Fill, Stroke } from 'ol/style';
+// import {unByKey} from 'ol/Observable.js';
+// import Overlay from 'ol/Overlay.js';
+// import LineString from 'ol/geom/LineString.js';
+// import Polygon from 'ol/geom/Polygon.js';
+// import {getArea, getLength} from 'ol/sphere.js';
 
 let map;
 let mousePositionControl; 
@@ -41,16 +46,14 @@ const showMyGeoPoint = ref(false);
 const projection = ref('EPSG:4326');
 const precision = ref(4);
 const mousePositionTarget = ref(null);
-const units = ref('metric');
-const type = ref('scaleline');
-const scaleBarOptionsContainer = ref(null);
-const unitsSelect = ref(null);
-const typeSelect = ref(null);
-const stepsRange = ref(null);
+const unitsSelect = ref('metric');
+const scaleSelect = ref('scaleline');
+const stepsRange = ref('');
 const scaleTextCheckbox = ref(null);
 const invertColorsCheckbox = ref(null);
 const myGeoVectorRef = ref(null);
-const drawType = ref('Point');
+const drawType = ref('');
+// const measureType = ref('');
 
 // 기본 지도
 const defaultMap = {
@@ -86,11 +89,12 @@ const onMyGeoPoint = async () => {
 
 // control - scaleLine 
 const scaleControl = () => {
-  if (typeSelect.value === 'scaleline') {
+  if (scaleSelect.value === 'scaleline') {
+
     control = new ScaleLine({
       units: unitsSelect.value,
+      
     });
-    scaleBarOptionsContainer.value.style.display = 'none';
   } else {
     control = new ScaleLine({
       units: unitsSelect.value,
@@ -100,16 +104,17 @@ const scaleControl = () => {
       minWidth: 140,
     });
     onInvertColorsChange();
-scaleBarOptionsContainer.value?.style && (scaleBarOptionsContainer.value.style.display = 'block');
   }
   return control;
 }
 
 const onChangeUnit = () => {
+  console.log("unitsSelect value = ", unitsSelect.value);
   control.setUnits(unitsSelect.value);
 }
 
 const reconfigureScaleLine = () => {
+  console.log("scaletype value = ", scaleSelect.value);
   map.removeControl(control);
   map.addControl(scaleControl());
 }
@@ -167,14 +172,33 @@ const addInteractions = () => {
   map.addInteraction(modify);
 };
 
+// interaction - measure
+// const measureRaster = new TileLayer({
+//   source: new OSM(),
+// });
+
+// const measureSource = new VectorSource();
+
+
+
+// const measureVector = new VectorLayer({
+//   source: measureSource,
+//   style: {
+//     'fill-color': 'rgba(255, 255, 255, 0.2)',
+//     'stroke-color': '#ffcc33',
+//     'stroke-width': 2,
+//     'circle-radius': 7,
+//     'circle-fill-color': '#ffcc33',
+//   },
+// });
+
+
+
+
+
+
 
 onMounted (() => {
-  unitsSelect.value?.addEventListener('change', onChangeUnit);
-  typeSelect.value?.addEventListener('change', reconfigureScaleLine);
-  stepsRange.value?.addEventListener('input', reconfigureScaleLine);
-  scaleTextCheckbox.value?.addEventListener('change', reconfigureScaleLine);
-  invertColorsCheckbox.value?.addEventListener('change', onInvertColorsChange);
-
   mousePositionControl = new MousePosition({
     coordinateFormat: createStringXY(precision.value),
     projection: projection.value,
@@ -213,7 +237,8 @@ onMounted (() => {
       new TileLayer({
         source: new OSM(),
       }),
-      drawRaster, drawVector 
+      drawRaster, drawVector,
+      // measureRaster, measureVector
       ],
     view: new View({...defaultMap}),
   });
@@ -236,6 +261,10 @@ watch(drawType, () => {
     map.removeInteraction(snap);
     addInteractions();
 });
+
+// watch(measureType, () => {
+  
+// })
 
 </script>
 
@@ -268,9 +297,9 @@ watch(drawType, () => {
       <label for="precision">Precision</label>
       <input id="precision" type="number" min="0" max="12" v-model.number="precision" />
     </form>
-  <!-- control - scaleLine -->
+    <!-- control - scaleLine -->
     <label for="units">Units:</label>
-    <select id="units" v-model="units">
+    <select id="units" v-model="unitsSelect" @change="onChangeUnit">
       <option value="degrees">degrees</option>
       <option value="imperial">imperial inch</option>
       <option value="us">us inch</option>
@@ -278,16 +307,14 @@ watch(drawType, () => {
       <option value="metric">metric</option>
     </select>
     <label for="type">Type:</label>
-    <select id="type" ref="typeSelect" v-model="type">
+    <select id="type" ref="scaletype" v-model="scaleSelect" @change="reconfigureScaleLine">
       <option value="scaleline">ScaleLine</option>
       <option value="scalebar">ScaleBar</option>
     </select>
-    <!-- <label for="steps">Steps:</label>
-    <input id="steps" type="range" ref="stepsRange" /> -->
     <label for="showScaleText">Show scale text</label>
-    <input id="showScaleText" type="checkbox" ref="scaleTextCheckbox" />
+    <input id="showScaleText" type="checkbox" ref="scaleTextCheckbox" @change="reconfigureScaleLine" />
     <label for="invertColors">Invert colors</label>
-    <input id="invertColors" type="checkbox" ref="invertColorsCheckbox" />
+    <input id="invertColors" type="checkbox" ref="invertColorsCheckbox" @change="reconfigureScaleLine" />
     <!-- interaction - draw and modify features -->
     <form>
       <label for="drawType">Geometry type &nbsp;</label>
@@ -299,6 +326,14 @@ watch(drawType, () => {
         <option value="Circle">Circle</option>
       </select>
     </form>
+    <!-- interaction - measure -->
+      <!-- <form class="measure-form">
+      <label for="measureType">Measurement type &nbsp;</label>
+      <select id="measureType" v-model="measureType" @change="addInteraction">
+        <option value="length">Length (LineString)</option>
+        <option value="area">Area (Polygon)</option>
+      </select>
+    </form> -->
 </template>
 
 
@@ -417,5 +452,42 @@ input[type=range] {
   left: 0.5em;
   bottom: 0.5em;
 }
+
+/* interaction - measure */
+  /* .ol-tooltip {
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  color: white;
+  padding: 4px 8px;
+  opacity: 0.7;
+  white-space: nowrap;
+  font-size: 12px;
+  cursor: default;
+  user-select: none;
+}
+.ol-tooltip-measure {
+  opacity: 1;
+  font-weight: bold;
+}
+.ol-tooltip-static {
+  background-color: #ffcc33;
+  color: black;
+  border: 1px solid white;
+}
+.ol-tooltip-measure:before,
+.ol-tooltip-static:before {
+  border-top: 6px solid rgba(0, 0, 0, 0.5);
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  margin-left: -7px;
+  left: 50%;
+}
+.ol-tooltip-static:before {
+  border-top-color: #ffcc33;
+} */
 
 </style>
