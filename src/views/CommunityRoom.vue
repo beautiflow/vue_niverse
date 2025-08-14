@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import {getJsonAxios} from '@/axios';
+import {getBoardAxios, getJsonAxios} from '@/axios';
 import { useRouter } from 'vue-router';
 import SideNavbar from '@/components/SideNavbar.vue';
 import CreateModal from '@/components/CreateCommunity.vue';
@@ -19,7 +19,6 @@ const community = ref({
 });
 
 const openModal = () => {
-  console.log("open modal")
   showModal.value = true;
 };
 
@@ -30,13 +29,13 @@ const closeModal = () => {
 const saveBoard = async (newBoard) => {
   try {
     const data = {
-      id: community.value.length + 1,      
+      id: community.value.length + 1,
       author: newBoard.author,
       title: newBoard.title,
       content: newBoard.content,
       createDate: new Date().toISOString(),
     };
-    const res = await getJsonAxios.post('board', data);
+    const res = await getBoardAxios.post('board', data);
     console.log('Saved:', res.data);
     showModal.value = false;
     const addRes = await getJsonAxios.get("board");
@@ -49,6 +48,7 @@ const saveBoard = async (newBoard) => {
 onMounted(async() => {
       const res = await getJsonAxios.get("board");
       community.value = res.data
+      console.log(community.value);
 });
 
 const moveToPage = (boardId) => {
@@ -65,7 +65,7 @@ const moveToPage = (boardId) => {
 
 <template>
   <SideNavbar />
-  <div>  
+  <div>
     <div class="container">
       <h1 class="title">community page</h1>
       <div class="table-section">
@@ -74,13 +74,13 @@ const moveToPage = (boardId) => {
         </div>
         <div class="container my-4" style="max-width: 800px;">
           <template v-if="community.length > 0">
-            <div              
+            <div
               v-for="board in community"
               :key="board.createDate"
               class="card mb-3 shadow-sm"
               style="border-radius: 1rem;"
             >
-              <div 
+              <div
                 class="card-body p-3"
                 style="cursor: pointer"
                 @click="moveToPage(board.id)">
@@ -100,7 +100,7 @@ const moveToPage = (boardId) => {
                   </p>
                   <small class="text-muted">
                     {{ board.author }}
-                    {{ new Date(board.createDate).toLocaleDateString() }}
+                    {{ new Date(board.createdAt).toLocaleDateString() }}
                   </small>
                 </div>
               </div>
@@ -115,7 +115,7 @@ const moveToPage = (boardId) => {
   </div>
 
  <teleport to="#modal">
-    <CreateModal 
+    <CreateModal
       :showModal="showModal"
       @closeModal="closeModal"
       @saveBoard="saveBoard"
@@ -123,7 +123,7 @@ const moveToPage = (boardId) => {
   </teleport>
 
   <CreateModal v-if="showModal" />
-   
+
 </template>
 <style scoped>
 

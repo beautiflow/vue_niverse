@@ -15,5 +15,9 @@ export const getGeosAxios = axios.create({
 
 
 export const getJsonAxios = axios.create({
-  baseURL: 'http://localhost:3000/',
+  baseURL: 'http://localhost:8080/',
+})
+
+export const getBoardAxios = axios.create({
+  baseURL: 'http://localhost:8080/',
 })

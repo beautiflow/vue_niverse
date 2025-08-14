@@ -8,7 +8,7 @@ const defaultBoard = {
     title: '',
     content: '',
     author: '',
-}; 
+};
 const onClose = () => {
   emit('closeModal');
 }
@@ -25,17 +25,12 @@ const saveBoard = () => {
     alert('모든 필드를 입력해주세요.');
     return;
   }
-  emit('saveBoard', { 
-    title: newBoard.value.title,
-    author: newBoard.value.author,
-    content: newBoard.value.content,
-  });
 
-  emit('saveBoard', { 
+  emit('saveBoard', {
     ...newBoard.value
   });
 
-  newBoard.value = {...defaultBoard};  
+  newBoard.value = {...defaultBoard};
 }
 
 const props = defineProps({
