@@ -2,7 +2,7 @@
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import {Map, View} from 'ol';
-import {fromLonLat, get  } from 'ol/proj'; 
+import {fromLonLat, get  } from 'ol/proj';
 import { ref, onMounted, watch } from 'vue';
 import 'ol/ol.css';
 import FullScreen from 'ol/control/FullScreen.js';
@@ -29,18 +29,18 @@ import Snap from 'ol/interaction/Snap.js';
 import { Style,  Circle as CircleStyle, Fill, Stroke } from 'ol/style';
 
 let map;
-let mousePositionControl; 
+let mousePositionControl;
 let overviewMapControl;
 let control;
-let draw, snap; 
+let draw, snap;
 
 const key = import.meta.env.VITE_MAP_THUNDERFOREST_KEY;
 
-const showWMS = ref(false); 
-const showWFS = ref(false); 
-const showMyGeoPolygon = ref(false); 
-const showMyGeoPoint = ref(false); 
-const showTranslate = ref(false); 
+const showWMS = ref(false);
+const showWFS = ref(false);
+const showMyGeoPolygon = ref(false);
+const showMyGeoPoint = ref(false);
+const showTranslate = ref(false);
 
 const projection = ref('EPSG:4326');
 const precision = ref(4);
@@ -50,12 +50,11 @@ const scaleSelect = ref('scaleline');
 const stepsRange = ref('');
 const scaleTextCheckbox = ref(null);
 const invertColorsCheckbox = ref(null);
-const myGeoVectorRef = ref(null);
 const drawType = ref('');
 
 // 기본 지도
 const defaultMap = {
-  center: fromLonLat([0, 0]), 
+  center: fromLonLat([0, 0]),
   zoom: 2,
 };
 
@@ -82,7 +81,7 @@ const onMyGeoPolygon = () => {
 
 // geoServer 데이터 연동 - POINT
 const onMyGeoPoint = async () => {
-    toggleMyGeoPoint(map, showMyGeoPoint, setViewPosition, myGeoVectorRef);
+    toggleMyGeoPoint(map, showMyGeoPoint, setViewPosition);
 }
 
 // interaction - translate
@@ -90,13 +89,13 @@ const onTranslate = () => {
   toggleTranslate(map, showTranslate, setViewPosition);
 }
 
-// control - scaleLine 
+// control - scaleLine
 const scaleControl = () => {
   if (scaleSelect.value === 'scaleline') {
 
     control = new ScaleLine({
       units: unitsSelect.value,
-      
+
     });
   } else {
     control = new ScaleLine({
@@ -139,17 +138,17 @@ const drawVector = new VectorLayer({
   source: source,
   style: new Style({
     image: new CircleStyle({
-      radius: 7, 
+      radius: 7,
       fill: new Fill({ color: 'rgba(255, 0, 0, 0.1)' }),
       stroke: new Stroke({
-        color: '#ff0000', 
-        width: 2, 
+        color: '#ff0000',
+        width: 2,
       }),
     }),
     fill: new Fill({ color: 'rgba(255, 0, 0, 0.1)' }),
     stroke: new Stroke({
       color: '#ff0000',
-      width: 2, 
+      width: 2,
     }),
   }),
 });
@@ -165,12 +164,12 @@ const addInteractions = () => {
     return;
   }
   draw = new Draw({
-  source: source, 
-  type: drawType.value, 
+  source: source,
+  type: drawType.value,
   });
   map.addInteraction(draw);
 
-  snap = new Snap({ source: source }); 
+  snap = new Snap({ source: source });
   map.addInteraction(snap);
   map.addInteraction(modify);
 };
@@ -221,7 +220,7 @@ onMounted (() => {
   const zoomslider = new ZoomSlider();
   map.addControl(zoomslider);
   map.addInteraction(modify);
-  addInteractions(); 
+  addInteractions();
 
 });
 
@@ -243,19 +242,19 @@ watch(drawType, () => {
 
 <template>
   <div>
-    <button @click="onWMS" class="btn btn-success mb-2">    
+    <button @click="onWMS" class="btn btn-success mb-2">
         {{ showWMS ? 'Off WMS' : 'On WMS' }}
     </button>
-    <button @click="onWFS" class="btn btn-primary ms-2 mb-2 ">    
+    <button @click="onWFS" class="btn btn-primary ms-2 mb-2 ">
         {{ showWFS ? 'Off WFS' : 'On WFS' }}
     </button>
-    <button @click="onMyGeoPolygon" class="btn btn-dark ms-2 mb-2 ">    
+    <button @click="onMyGeoPolygon" class="btn btn-dark ms-2 mb-2 ">
         {{ showMyGeoPolygon ? 'Off MyGeoPolygon' : 'On MyGeoPolygon' }}
     </button>
-    <button @click="onMyGeoPoint" class="btn btn-danger ms-2 mb-2 ">    
+    <button @click="onMyGeoPoint" class="btn btn-danger ms-2 mb-2 ">
         {{ showMyGeoPoint ? 'Off MyGeoPoint' : 'On MyGeoPoint' }}
     </button>
-     <button @click="onTranslate" class="btn btn-warning ms-2 mb-2 ">    
+     <button @click="onTranslate" class="btn btn-warning ms-2 mb-2 ">
         {{ showTranslate ? 'Off Translate' : 'On Translate' }}
     </button>
   </div>
@@ -302,7 +301,7 @@ watch(drawType, () => {
         <option value="Circle">Circle</option>
       </select>
     </form>
-  
+
 </template>
 
 
@@ -321,7 +320,7 @@ watch(drawType, () => {
 }
 .map-container:fullscreen {
   height: 100%;
-} 
+}
 .map-container .ol-rotate {
   top: 3em;
 }
@@ -360,7 +359,7 @@ watch(drawType, () => {
   background: rgba(255, 255, 255, 0.7);
   padding: 4px 8px;
   z-index: 10;
-  min-width: 130px; 
+  min-width: 130px;
   font-size: 12px;
   padding: 4px 12px;
   border-radius: 4px;

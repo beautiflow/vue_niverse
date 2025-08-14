@@ -5,7 +5,9 @@ import GeoJSON from 'ol/format/GeoJSON';
 import { Style, Circle as CircleStyle, Fill, Stroke } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 
-export async function toggleMyGeoPoint(map, showMyGeoPoint, setViewPosition, myGeoVectorRef) {
+let pointLayer = null;
+
+export async function toggleMyGeoPoint(map, showMyGeoPoint, setViewPosition) {
   showMyGeoPoint.value = !showMyGeoPoint.value;
 
   if (showMyGeoPoint.value) {
@@ -18,7 +20,7 @@ export async function toggleMyGeoPoint(map, showMyGeoPoint, setViewPosition, myG
       }),
     });
 
-    const layer = new VectorLayer({
+    pointLayer = new VectorLayer({
       source: vectorSource2,
       style: new Style({
         image: new CircleStyle({
@@ -29,15 +31,15 @@ export async function toggleMyGeoPoint(map, showMyGeoPoint, setViewPosition, myG
       }),
     });
 
-    myGeoVectorRef.value = layer;
-    map.addLayer(layer);
+    map.addLayer(pointLayer);
 
     setViewPosition({
       center: fromLonLat([127.3905, 36.3705]),
       zoom: 16,
     });
   } else {
-    map.removeLayer(myGeoVectorRef.value);
+    map.removeLayer(pointLayer);
     setViewPosition();
+    pointLayer = null;
   }
 }

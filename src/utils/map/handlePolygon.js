@@ -10,7 +10,7 @@ export function toggleMyGeoPolygon(map, showPolygonRef, setViewPosition) {
   if (showPolygonRef.value) {
     polygonLayer = new ImageLayer({
       source: new ImageWMS({
-        url: 'http://localhost:8080/geoserver/geoS/wms?service=WMS',
+        url: 'http://localhost:8081/geoserver/geoS/wms?service=WMS',
         params: {
           'VERSION': '1.1.0',
           'LAYERS': 'polygon',

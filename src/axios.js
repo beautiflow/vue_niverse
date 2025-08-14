@@ -5,7 +5,7 @@ export const getGeosAxios = axios.create({
     server: {
     proxy: {
       '/geoserver': {
-        target: 'http://localhost:8080', // GeoServer 백엔드 주소
+        target: 'http://localhost:8081', // GeoServer 백엔드 주소
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/geoserver/, '/geoserver'),
       },
