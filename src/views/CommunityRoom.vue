@@ -51,13 +51,11 @@ onMounted(async() => {
       console.log(community.value);
 });
 
-const moveToPage = (boardId) => {
-  console.log(boardId);
-  // router.push('/todos/'+ todoId);
+const moveToPage = (id) => {
   router.push({
-    name: 'boardDetail',
+    name: 'BoardDetail',
     params: {
-      id: boardId
+      id: id
     }
   });
 };
