@@ -1,6 +1,11 @@
 <script setup>
 import { ref, watch } from 'vue';
 
+const props = defineProps({
+  showModal: Boolean,
+  board: Object
+});
+
 const emit = defineEmits(['closeModal', 'saveBoard', 'updateBoard'])
 
 const isEditing = ref(false);
@@ -35,12 +40,7 @@ const handleSave = () => {
   }
 }
 
-const props = defineProps({
-  showModal: Boolean,
-  board: Object
-})
-
- const newBoard = ref({...defaultBoard});
+const newBoard = ref({...defaultBoard});
 
 watch(() => props.board, (newVal) => {
   if (newVal) {

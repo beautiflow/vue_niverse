@@ -9,7 +9,6 @@ const router = useRouter();
 
 const showModal = ref(false);
 const selectedBoard = ref(null);
-
 const community = ref({
   id : '',
   title: '',
