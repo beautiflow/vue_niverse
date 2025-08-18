@@ -53,6 +53,7 @@ onMounted(async () => {
   const id = route.params.id
   const res = await getBoardAxios(`/board/${id}`)
   community.value = res.data;
+  console.log("community value = ", community.value);
 })
 </script>
 
@@ -65,7 +66,14 @@ onMounted(async () => {
     <div class="post">
       <h2 class="post-title">{{ community.title }}</h2>
       <p class="meta">
-        작성자: {{ community.author }} | 작성일: {{ community.createdAt }} | ID: {{ community.id }}
+        작성자: {{ community.author }} |
+        <span v-if="community.createdAt !== community.updatedAt">
+          수정일: {{ new Date(community.updatedAt).toLocaleString() }}
+        </span>
+        <span v-else>
+          작성일: {{ new Date(community.createdAt).toLocaleString() }}
+        </span>
+        | ID: {{ community.id }}
       </p>
       <p class="post-content">{{ community.content }}</p>
 

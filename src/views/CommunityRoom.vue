@@ -98,7 +98,7 @@ const moveToPage = (id) => {
                   </p>
                   <small class="text-muted">
                     {{ board.author }}
-                    {{ new Date(board.createdAt).toLocaleDateString() }}
+                    {{ new Date(board.updatedAt).toLocaleString() }}
                   </small>
                 </div>
               </div>
