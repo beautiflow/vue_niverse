@@ -4,10 +4,14 @@ import {onMounted, ref} from "vue";
 import {getBoardAxios} from "@/axios.js";
 import {useRoute , useRouter} from "vue-router";
 import CreateModal from "@/components/CreateCommunity.vue";
+import DeleteModal from "@/components/DeleteCommunity.vue";
+
 const route = useRoute();
 const router = useRouter();
 
 const showModal = ref(false);
+const deleteModal = ref(false);
+
 const selectedBoard = ref(null);
 
 const community = ref({
@@ -34,6 +38,20 @@ const updateBoard = async (updateBoard) => {
   }
 }
 
+const openDeleteModal = () => {
+  deleteModal.value = true;
+}
+
+const deleteBoard = async () => {
+  console.log("ddddlete board");
+  const id = route.params.id;
+  const res = await getBoardAxios.delete(`/board/${id}`);
+  console.log("res = ", res.data);
+  deleteModal.value = false;
+  router.push({
+    name: 'Community',
+  });}
+
 const goToList = () => {
   router.push({
     name: 'Community',
@@ -47,6 +65,7 @@ const openModal = () => {
 
 const closeModal = () => {
   showModal.value = false;
+  deleteModal.value = false;
 };
 
 onMounted(async () => {
@@ -80,7 +99,7 @@ onMounted(async () => {
       <div class="post-buttons">
         <button class="btn list-btn" @click="goToList" data-tooltip="go to List"><i class="fa-solid fa-list"></i></button>
         <button class="btn update-btn" @click="openModal" data-tooltip="update"><i class="fa-regular fa-pen-to-square"></i></button>
-        <button class="btn delete-btn" data-tooltip="delete"><i class="fa-regular fa-trash-can"></i></button>
+        <button class="btn delete-btn" @click="openDeleteModal" data-tooltip="delete"><i class="fa-regular fa-trash-can"></i></button>
       </div>
     </div>
     <hr />
@@ -89,14 +108,25 @@ onMounted(async () => {
 
   <teleport to="#modal">
     <CreateModal
+      v-if="showModal"
       :showModal="showModal"
       :board="selectedBoard"
       @closeModal="closeModal"
       @updateBoard="updateBoard"
     />
   </teleport>
+<!--  <CreateModal  />-->
 
-  <CreateModal v-if="showModal" />
+  <teleport to="#modal">
+    <DeleteModal
+      v-if="deleteModal"
+      :deleteModal="deleteModal"
+      @closeModal="closeModal"
+      @deleteBoard="deleteBoard"
+    />
+  </teleport>
+
+
 </template>
 <style scoped>
 

@@ -46,11 +46,9 @@ watch(() => props.board, (newVal) => {
   if (newVal) {
     isEditing.value = true;
     Object.assign(newBoard.value, newVal);
-
   } else {
     isEditing.value = false;
     Object.assign(newBoard.value, { id: null, title: '', content: '', author: '' })
-
   }
 }, { immediate: true });
 
