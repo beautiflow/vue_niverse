@@ -1,19 +1,21 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
-const emit = defineEmits(['closeModal', 'saveBoard'])
+const emit = defineEmits(['closeModal', 'saveBoard', 'updateBoard'])
 
+const isEditing = ref(false);
 
 const defaultBoard = {
     title: '',
     content: '',
     author: '',
 };
+
 const onClose = () => {
   emit('closeModal');
 }
 
-const saveBoard = () => {
+const handleSave = () => {
   if (!newBoard.value.title || !newBoard.value.author || !newBoard.value.content) {
     if (!newBoard.value.title) {
       document.getElementById('titleInput')?.focus();
@@ -26,32 +28,45 @@ const saveBoard = () => {
     return;
   }
 
-  emit('saveBoard', {
-    ...newBoard.value
-  });
-
-  newBoard.value = {...defaultBoard};
+  if (isEditing.value) {
+    emit('updateBoard', newBoard.value);
+  } else {
+    emit('saveBoard', newBoard.value);
+  }
 }
 
 const props = defineProps({
   showModal: Boolean,
+  board: Object
 })
 
  const newBoard = ref({...defaultBoard});
+
+watch(() => props.board, (newVal) => {
+  if (newVal) {
+    isEditing.value = true;
+    Object.assign(newBoard.value, newVal);
+
+  } else {
+    isEditing.value = false;
+    Object.assign(newBoard.value, { id: null, title: '', content: '', author: '' })
+
+  }
+}, { immediate: true });
 
 </script>
 
 <template>
   <div v-if="props.showModal" class="modal-backdrop">
     <div class="modal-content">
-    <h2>새 게시물 작성</h2>
+      <h2>{{ isEditing ? '게시글 수정' : '새 게시물 작성' }}</h2>
     <label>
         제목:
         <input id="titleInput" v-model="newBoard.title" type="text" />
     </label>
     <label>
         작성자:
-        <input id="authorInput" v-model="newBoard.author" type="text" />
+      <input id="authorInput" v-model="newBoard.author" type="text" :disabled="isEditing" />
     </label>
     <label>
         내용:
@@ -59,7 +74,7 @@ const props = defineProps({
     </label>
     <div class="modal-buttons">
         <button class="closeModal btn btn-outline-dark" @click='onClose'>취소</button>
-        <button class="btn btn-primary" @click="saveBoard">저장</button>
+        <button class="btn btn-primary" @click="handleSave">{{ isEditing ? '수정' : '저장' }}</button>
     </div>
     </div>
   </div>

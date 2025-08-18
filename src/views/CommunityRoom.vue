@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import {getBoardAxios, getJsonAxios} from '@/axios';
+import {getBoardAxios} from '@/axios';
 import { useRouter } from 'vue-router';
 import SideNavbar from '@/components/SideNavbar.vue';
 import CreateModal from '@/components/CreateCommunity.vue';
@@ -8,6 +8,7 @@ import CreateModal from '@/components/CreateCommunity.vue';
 const router = useRouter();
 
 const showModal = ref(false);
+const selectedBoard = ref(null);
 
 const community = ref({
   id : '',
@@ -19,6 +20,7 @@ const community = ref({
 });
 
 const openModal = () => {
+  selectedBoard.value = null;
   showModal.value = true;
 };
 
@@ -35,10 +37,9 @@ const saveBoard = async (newBoard) => {
       content: newBoard.content,
       createDate: new Date().toISOString(),
     };
-    const res = await getBoardAxios.post('board', data);
-    console.log('Saved:', res.data);
+    await getBoardAxios.post('board', data);
     showModal.value = false;
-    const addRes = await getJsonAxios.get("board");
+    const addRes = await getBoardAxios.get("board");
     community.value = addRes.data;
   } catch (error) {
     console.error('Error saving board:', error);
@@ -46,9 +47,8 @@ const saveBoard = async (newBoard) => {
 };
 
 onMounted(async() => {
-      const res = await getJsonAxios.get("board");
-      community.value = res.data
-      console.log(community.value);
+  const res = await getBoardAxios.get("board");
+  community.value = res.data
 });
 
 const moveToPage = (id) => {
@@ -115,6 +115,7 @@ const moveToPage = (id) => {
  <teleport to="#modal">
     <CreateModal
       :showModal="showModal"
+      :board="selectedBoard"
       @closeModal="closeModal"
       @saveBoard="saveBoard"
     />
