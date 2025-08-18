@@ -120,18 +120,4 @@ watch(() => props.board, (newVal) => {
   margin-top: 1rem;
 }
 
-.create-button {
-  padding: 8px 16px;
-  font-size: 14px;
-  background-color: #0d6efd;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.create-button:hover {
-  background-color: #0b5ed7;
-}
-
 </style>

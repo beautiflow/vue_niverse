@@ -167,13 +167,6 @@ const moveToPage = (id) => {
   background-color: #0b5ed7;
 }
 
-.community-table {
-  width: 100%;
-  table-layout: auto;
-  border-collapse: collapse;
-  word-break: break-word;
-}
-
 .community-table th,
 .community-table td {
   border: 1px solid #ccc;
