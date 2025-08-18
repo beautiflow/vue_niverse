@@ -128,46 +128,17 @@ onMounted(async () => {
 </template>
 <style scoped>
 
-.container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 .title {
   text-align: center;
   margin-bottom: 30px;
   font-size: 2rem;
 }
 
-.table-section {
-  width: 100%;
-}
-
-.table-header {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 10px;
-}
-
-.table-header {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 10px;
-}
 .community-page {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
-}
-
-.page-title {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 30px;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 10px;
 }
 
 .post {

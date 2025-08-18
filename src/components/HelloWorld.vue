@@ -26,7 +26,7 @@ onMounted(async () => {
 <template>
   <div class="greetings">
     <h1 class="green">{{ msg }}</h1>
-     <p className="text-cyan-300">
+     <p>
         👥 전체 방문자 수 : {{ totalCount }}
      </p>
   </div>
