@@ -71,8 +71,8 @@ watch(() => props.board, (newVal) => {
         <textarea id="contentInput" v-model="newBoard.content"></textarea>
     </label>
     <div class="modal-buttons">
-        <button class="closeModal btn btn-outline-dark" @click='onClose'>취소</button>
-        <button class="btn btn-primary" @click="handleSave">{{ isEditing ? '수정' : '저장' }}</button>
+        <button class="closeModal btn btn-outline-dark" @click="onClose">취소</button>
+        <button class="btn btn-primary" @click="handleSave">{{ isEditing ? "수정" : "저장" }}</button>
     </div>
     </div>
   </div>

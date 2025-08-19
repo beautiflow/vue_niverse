@@ -36,7 +36,7 @@ const saveBoard = async (newBoard) => {
 };
 
 const getAllBoard = async () => {
-  const res = await getBoardAxios.get("board");
+  const res = await getBoardAxios.get('board');
   community.value = res.data;
 }
 
@@ -110,8 +110,6 @@ const moveToPage = (id) => {
       @saveBoard="saveBoard"
     />
   </teleport>
-
-  <CreateModal v-if="showModal" />
 
 </template>
 <style scoped>

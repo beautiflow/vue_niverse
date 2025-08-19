@@ -29,19 +29,19 @@ function toggleMenu() {
         <i class="fa-solid fa-bars"></i>
       </button>
       <button class="toggler menu-toggler" @click="toggleMenu">
-        <span class="material-symbols-rounded">{{ isMenuActive ? 'close' : 'menu' }}</span>
+        <span class="material-symbols-rounded">{{ isMenuActive ? "close" : "menu" }}</span>
       </button>
     </header>
 
     <nav class="sidebar-nav">
       <!-- Primary top nav -->
-      <ul 
+      <ul
         class="nav-list primary-nav"
         v-for="item in MenuItems" :key="item.id"
       >
         <li class="nav-item">
           <RouterLink :to='item.route' class="nav-link">
-              <i :class='item.icon'></i>        
+              <i :class='item.icon'></i>
               <span class="nav-label"> {{ item.label }} </span>
           </RouterLink>
           <span class="nav-tooltip">{{ item.label }}</span>
@@ -52,7 +52,7 @@ function toggleMenu() {
       <ul class="nav-list secondary-nav">
         <li class="nav-item">
           <RouterLink to="/profile" class="nav-link">
-            <i class="fa-regular fa-user"></i>         
+            <i class="fa-regular fa-user"></i>
             <span class="nav-label">Profile</span>
           </RouterLink>
           <span class="nav-tooltip">Profile</span>
@@ -263,7 +263,7 @@ body {
   .sidebar-nav .nav-item:hover .nav-tooltip {
     display: none;
   }
-  
+
   .sidebar-header .menu-toggler {
     display: flex;
     height: 30px;

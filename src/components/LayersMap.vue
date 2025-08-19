@@ -243,22 +243,22 @@ watch(drawType, () => {
 <template>
   <div>
     <button @click="onWMS" class="btn btn-success mb-2">
-        {{ showWMS ? 'Off WMS' : 'On WMS' }}
+        {{ showWMS ? "Off WMS" : "On WMS" }}
     </button>
     <button @click="onWFS" class="btn btn-primary ms-2 mb-2 ">
-        {{ showWFS ? 'Off WFS' : 'On WFS' }}
+        {{ showWFS ? "Off WFS" : "On WFS" }}
     </button>
     <button @click="onMyGeoPolygon" class="btn btn-dark ms-2 mb-2 ">
-        {{ showMyGeoPolygon ? 'Off MyGeoPolygon' : 'On MyGeoPolygon' }}
+        {{ showMyGeoPolygon ? "Off MyGeoPolygon" : "On MyGeoPolygon" }}
     </button>
     <button @click="onMyGeoPoint" class="btn btn-danger ms-2 mb-2 ">
-        {{ showMyGeoPoint ? 'Off MyGeoPoint' : 'On MyGeoPoint' }}
+        {{ showMyGeoPoint ? "Off MyGeoPoint" : "On MyGeoPoint" }}
     </button>
      <button @click="onTranslate" class="btn btn-warning ms-2 mb-2 ">
-        {{ showTranslate ? 'Off Translate' : 'On Translate' }}
+        {{ showTranslate ? "Off Translate" : "On Translate" }}
     </button>
   </div>
-  <div id='map-container'>
+  <div id="map-container">
   </div>
   <!-- control - mousePosition -->
   <div ref="mousePositionTarget" class="custom-mouse-position">

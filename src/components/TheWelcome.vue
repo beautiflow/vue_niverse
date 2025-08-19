@@ -7,10 +7,10 @@ import { MenuItems } from '@/constants/menu.js';
 <template>
     <WelcomeItem v-for="item in MenuItems" :key="item.id">
     <template #icon>
-      <i :class='item.icon'></i>        
+      <i :class="item.icon"></i>
     </template>
     <template #heading>
-      <RouterLink :to='item.route'>{{ item.label }}</RouterLink>
+      <RouterLink :to="item.route">{{ item.label }}</RouterLink>
     </template>
   </WelcomeItem>
 </template>
