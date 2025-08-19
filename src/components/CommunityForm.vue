@@ -21,12 +21,12 @@ const onClose = () => {
 }
 
 const handleSave = () => {
-  if (!newBoard.value.title || !newBoard.value.author || !newBoard.value.content) {
-    if (!newBoard.value.title) {
+  if (!BoardForm.value.title || !BoardForm.value.author || !BoardForm.value.content) {
+    if (!BoardForm.value.title) {
       document.getElementById('titleInput')?.focus();
-    } else if (!newBoard.value.author) {
+    } else if (!BoardForm.value.author) {
       document.getElementById('authorInput')?.focus();
-    } else if (!newBoard.value.content) {
+    } else if (!BoardForm.value.content) {
       document.getElementById('contentInput')?.focus();
     }
     alert('모든 필드를 입력해주세요.');
@@ -34,21 +34,21 @@ const handleSave = () => {
   }
 
   if (isEditing.value) {
-    emit('updateBoard', newBoard.value);
+    emit('updateBoard', BoardForm.value);
   } else {
-    emit('saveBoard', newBoard.value);
+    emit('saveBoard', BoardForm.value);
   }
 }
 
-const newBoard = ref({...defaultBoard});
+const BoardForm = ref({...defaultBoard});
 
 watch(() => props.board, (newVal) => {
   if (newVal) {
     isEditing.value = true;
-    Object.assign(newBoard.value, newVal);
+    Object.assign(BoardForm.value, newVal);
   } else {
     isEditing.value = false;
-    Object.assign(newBoard.value, { id: null, title: '', content: '', author: '' })
+    Object.assign(BoardForm.value, { id: null, title: '', content: '', author: '' })
   }
 }, { immediate: true });
 
@@ -60,15 +60,15 @@ watch(() => props.board, (newVal) => {
       <h2>{{ isEditing ? '게시글 수정' : '새 게시물 작성' }}</h2>
     <label>
         제목:
-        <input id="titleInput" v-model="newBoard.title" type="text" />
+        <input id="titleInput" v-model="BoardForm.title" type="text" />
     </label>
     <label>
         작성자:
-      <input id="authorInput" v-model="newBoard.author" type="text" :disabled="isEditing" />
+      <input id="authorInput" v-model="BoardForm.author" type="text" :disabled="isEditing" />
     </label>
     <label>
         내용:
-        <textarea id="contentInput" v-model="newBoard.content"></textarea>
+        <textarea id="contentInput" v-model="BoardForm.content"></textarea>
     </label>
     <div class="modal-buttons">
         <button class="closeModal btn btn-outline-dark" @click="onClose">취소</button>
