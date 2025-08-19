@@ -8,7 +8,7 @@ import MoonPhases from '@/views/MoonPhases.vue';
 import Settings from '@/views/Settings.vue';
 import Profile from '@/views/Profile.vue';
 import OpenLayersMap from '@/views/OpenLayersMap.vue';
-import BoardDetail from '@/views/community/_id.vue';
+import BoardDetail from '@/views/community/BoardDetail.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
