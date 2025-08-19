@@ -9,14 +9,7 @@ const router = useRouter();
 
 const showModal = ref(false);
 const selectedBoard = ref(null);
-const community = ref({
-  id : '',
-  title: '',
-  content: '',
-  author: '',
-  createDate: '',
-  updateDate: '',
-});
+const community = ref([]);
 
 const openModal = () => {
   selectedBoard.value = null;
@@ -30,25 +23,27 @@ const closeModal = () => {
 const saveBoard = async (newBoard) => {
   try {
     const data = {
-      id: community.value.length + 1,
       author: newBoard.author,
       title: newBoard.title,
       content: newBoard.content,
-      createDate: new Date().toISOString(),
     };
     await getBoardAxios.post('board', data);
     showModal.value = false;
-    const addRes = await getBoardAxios.get("board");
-    community.value = addRes.data;
+    getAllBoard();
   } catch (error) {
     console.error('Error saving board:', error);
   }
 };
 
-onMounted(async() => {
+const getAllBoard = async () => {
   const res = await getBoardAxios.get("board");
-  community.value = res.data
+  community.value = res.data;
+}
+
+onMounted(() => {
+  getAllBoard();
 });
+
 
 const moveToPage = (id) => {
   router.push({
@@ -97,7 +92,7 @@ const moveToPage = (id) => {
                   </p>
                   <small class="text-muted">
                     {{ board.author }}
-                    {{ new Date(board.updatedAt).toLocaleString() }}
+                    {{ board.updatedAt ? new Date(board.updatedAt).toLocaleString() : new Date(board.createdAt).toLocaleString() }}
                   </small>
                 </div>
               </div>

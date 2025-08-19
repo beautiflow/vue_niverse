@@ -12,14 +12,7 @@ const router = useRouter();
 const showModal = ref(false);
 const deleteModal = ref(false);
 const selectedBoard = ref(null);
-const community = ref({
-  id : '',
-  title: '',
-  content: '',
-  author: '',
-  createDate: '',
-  updateDate: '',
-});
+const community = ref([]);
 
 const updateBoard = async (updateBoard) => {
   try{
@@ -84,7 +77,7 @@ onMounted(async () => {
       <h2 class="post-title">{{ community.title }}</h2>
       <p class="meta">
         작성자: {{ community.author }} |
-        <span v-if="community.createdAt !== community.updatedAt">
+        <span v-if="community.updatedAt != null">
           수정일: {{ new Date(community.updatedAt).toLocaleString() }}
         </span>
         <span v-else>
