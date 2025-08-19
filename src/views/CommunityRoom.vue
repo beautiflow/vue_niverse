@@ -46,13 +46,9 @@ onMounted(() => {
 
 
 const moveToPage = (id) => {
-  router.push({
-    name: 'BoardDetail',
-    params: {
-      id: id
-    }
-  });
+  router.push(`/community/${id}`);
 };
+
 </script>
 
 <template>
