@@ -3,7 +3,7 @@ import SideNavbar from "@/components/SideNavbar.vue";
 import {onMounted, ref} from "vue";
 import {getBoardAxios} from "@/axios.js";
 import {useRoute , useRouter} from "vue-router";
-import CreateModal from "@/components/CreateCommunity.vue";
+import CommunityForm from "@/components/CommunityForm.vue";
 import DeleteModal from "@/components/DeleteCommunity.vue";
 
 const route = useRoute();
@@ -98,7 +98,7 @@ onMounted(async () => {
   </div>
 
   <teleport to="#modal">
-    <CreateModal
+    <CommunityForm
       v-if="showModal"
       :showModal="showModal"
       :board="selectedBoard"
@@ -106,7 +106,6 @@ onMounted(async () => {
       @updateBoard="updateBoard"
     />
   </teleport>
-<!--  <CreateModal  />-->
 
   <teleport to="#modal">
     <DeleteModal

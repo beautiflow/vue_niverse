@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import {getBoardAxios} from '@/axios';
 import { useRouter } from 'vue-router';
 import SideNavbar from '@/components/SideNavbar.vue';
-import CreateModal from '@/components/CreateCommunity.vue';
+import CreateModal from '@/components/CommunityForm.vue';
 
 const router = useRouter();
 
