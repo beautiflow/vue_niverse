@@ -48,7 +48,6 @@ watch(() => props.board, (newVal) => {
     Object.assign(BoardForm.value, newVal);
   } else {
     isEditing.value = false;
-    Object.assign(BoardForm.value, { id: null, title: '', content: '', author: '' })
   }
 }, { immediate: true });
 
