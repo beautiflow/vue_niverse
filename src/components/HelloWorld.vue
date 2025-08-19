@@ -13,9 +13,8 @@ const totalCount = ref(0);
 
 onMounted(async () => {
   try {
-    await getJsonAxios.put("visit");
-    const res = await getJsonAxios.get("visit");
-     totalCount.value = res.data;
+    const resput = await getJsonAxios.put("visit");
+     totalCount.value = resput.data;
   } catch (error) {
     console.error("방문자 수 처리 중 오류 발생:", error);
   }
