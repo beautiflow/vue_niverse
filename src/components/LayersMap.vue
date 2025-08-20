@@ -16,6 +16,7 @@ import Rotate from 'ol/control/Rotate.js';
 import { toggleWMS } from '@/utils/map/wmsLayer.js';
 import { toggleWFS } from '@/utils/map/wfsLayer.js';
 import { toggleMyGeoPolygon } from '@/utils/map/handlePolygon.js';
+import { toggleMyGeoLine } from '@/utils/map/handleLine.js';
 import { toggleMyGeoPoint } from '@/utils/map/handlePoint.js';
 import { toggleTranslate }  from '@/utils/map/handleTranslate.js';
 
@@ -44,6 +45,7 @@ const key = import.meta.env.VITE_MAP_THUNDERFOREST_KEY;
 const showWMS = ref(false);
 const showWFS = ref(false);
 const showMyGeoPolygon = ref(false);
+const showMyGeoLine = ref(false);
 const showMyGeoPoint = ref(false);
 const showTranslate = ref(false);
 
@@ -83,6 +85,12 @@ const onWFS = () => {
 const onMyGeoPolygon = () => {
   toggleMyGeoPolygon(map, showMyGeoPolygon, setViewPosition);
 }
+
+// geoServer 데이터 연동 - POLYGON
+const onMyGeoLine = () => {
+  toggleMyGeoLine(map, showMyGeoLine, setViewPosition);
+}
+
 
 // geoServer 데이터 연동 - POINT
 const onMyGeoPoint = async () => {
@@ -311,6 +319,9 @@ watch(drawType, () => {
     </button>
     <button @click="onMyGeoPolygon" class="btn btn-dark ms-2 mb-2 ">
         {{ showMyGeoPolygon ? "Off MyGeoPolygon" : "On MyGeoPolygon" }}
+    </button>
+    <button @click="onMyGeoLine" class="btn btn-info ms-2 mb-2 ">
+      {{ showMyGeoLine ? "Off MyGeoLine" : "On MyGeoLine" }}
     </button>
     <button @click="onMyGeoPoint" class="btn btn-danger ms-2 mb-2 ">
         {{ showMyGeoPoint ? "Off MyGeoPoint" : "On MyGeoPoint" }}
