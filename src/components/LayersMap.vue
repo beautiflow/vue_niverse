@@ -166,15 +166,15 @@ const drawVector = new VectorLayer({
   }),
 });
 
-const showModal = ref(false);
-const selectedLanLon = ref(null);
+const showPointModal = ref(false);
+const selectedPoint = ref(null);
 
-const openModal = () => {
-  showModal.value = true;
+const openPointModal = () => {
+  showPointModal.value = true;
 };
 
 const closeModal = () => {
-  showModal.value = false;
+  showPointModal.value = false;
 };
 
 
@@ -195,7 +195,7 @@ const savePoint = async (newPoint) => {
     }
     console.log("data = ", data);
     await getJsonAxios.post('point', data);
-    showModal.value = false;
+    showPointModal.value = false;
   }catch (error){
     console.error('Error saving point: ', error);
   }
@@ -214,10 +214,10 @@ const addInteractions = () => {
   console.log(drawType.value);
     map.on('click', (e) => {
       if(drawType.value === "Point") {
-      openModal();
+        openPointModal();
       const coord = e.coordinate
       const [lon, lat] = transform(coord, 'EPSG:3857', 'EPSG:4326')
-      selectedLanLon.value = {
+        selectedPoint.value = {
         lon: lon,
         lat: lat
       };
@@ -300,9 +300,9 @@ watch(drawType, () => {
 
   <teleport to="#modal">
     <LanLonDataModal
-      v-if="showModal"
-      :showModal="showModal"
-      :lanLonData="selectedLanLon"
+      v-if="showPointModal"
+      :showPointModal="showPointModal"
+      :selectedPoint="selectedPoint"
       @closeModal="closeModal"
       @savePoint="savePoint"
 

@@ -3,18 +3,18 @@
 import {reactive} from "vue";
 
 const props = defineProps({
-  showModal: Boolean,
-  lanLonData: Object
+  showPointModal: Boolean,
+  selectedPoint: Object
 })
 
 
 const PointForm = reactive({
   name: '',
-  lat: props.lanLonData.lat || '',
-  lon: props.lanLonData.lon || ''
+  lat: props.selectedPoint.lat || '',
+  lon: props.selectedPoint.lon || ''
 })
 
-console.log("lanLonData = ", props.lanLonData);
+console.log("selectedPoint = ", props.selectedPoint);
 
 const emit = defineEmits(['closeModal', 'savePoint'])
 
@@ -41,7 +41,7 @@ const onSavePoint = () => {
 
 <template>
 
-  <div v-if="props.showModal" class="modal-backdrop">
+  <div v-if="props.showPointModal" class="modal-backdrop">
     <div class="modal-content">
       <div style="text-align: center;">
         <h2>Latitude & Longitude DATA</h2>
