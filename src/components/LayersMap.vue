@@ -319,8 +319,11 @@ watch(drawType, () => {
         {{ showTranslate ? "Off Translate" : "On Translate" }}
     </button>
   </div>
+
   <div id="map-container">
   </div>
+  <div id="popup" style="background:white; padding:4px; border:1px solid black; border-radius:4px; display:none;"></div>
+
   <!-- control - mousePosition -->
   <div ref="mousePositionTarget" class="custom-mouse-position">
   </div>

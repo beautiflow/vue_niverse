@@ -4,6 +4,7 @@ import { Vector as VectorSource } from 'ol/source';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Style, Circle as CircleStyle, Fill, Stroke } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
+import {Overlay} from "ol";
 
 let pointLayer = null;
 
@@ -31,8 +32,30 @@ export async function toggleMyGeoPoint(map, showMyGeoPoint, setViewPosition) {
       }),
     });
 
-    map.addLayer(pointLayer);
+    // 포인트 이름 보이기
+    const overlay = new Overlay({
+      element: document.getElementById('popup'),
+      positioning: 'bottom-center',
+      stopEvent: false,
+      offset: [0, -10],
+    });
+    map.addOverlay(overlay);
 
+    map.on('pointermove', (evt) => {
+      const feature = map.forEachFeatureAtPixel(evt.pixel, (f) => f);
+      const element = overlay.getElement();
+
+      if (feature) {
+        const coord = evt.coordinate;
+        overlay.setPosition(coord);
+        element.innerHTML = feature.get('name');
+        element.style.display = 'block';
+      } else {
+        element.style.display = 'none';
+      }
+    });
+
+    map.addLayer(pointLayer);
     setViewPosition({
       center: fromLonLat([127.3905, 36.3705]),
       zoom: 16,
