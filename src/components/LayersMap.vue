@@ -178,9 +178,6 @@ const modify = new Modify({source: source});
 
 const savePoint = async (newPoint) => {
   try {
-    console.log("newPoint = ", newPoint);
-
-
     const pointGeom = new Point([newPoint.lon, newPoint.lat]);
     const wktFormat = new WKT();
     const wktString = wktFormat.writeGeometry(pointGeom);
@@ -206,16 +203,20 @@ const addInteractions = () => {
   type: drawType.value,
   });
   map.addInteraction(draw);
-  map.on('click', (e) => {
-    openModal();
-    const coord = e.coordinate
-    const [lon, lat] = transform(coord, 'EPSG:3857', 'EPSG:4326')
-    selectedLanLon.value = {
-      lon: lon,
-      lat: lat
-    };
-    console.log('lon:', lon, 'lat:', lat)
-  })
+  console.log(drawType.value);
+    map.on('click', (e) => {
+      if(drawType.value === "Point") {
+      openModal();
+      const coord = e.coordinate
+      const [lon, lat] = transform(coord, 'EPSG:3857', 'EPSG:4326')
+      selectedLanLon.value = {
+        lon: lon,
+        lat: lat
+      };
+      console.log('lon:', lon, 'lat:', lat)
+      }
+    })
+
   snap = new Snap({ source: source });
   map.addInteraction(snap);
   map.addInteraction(modify);
