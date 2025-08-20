@@ -2,7 +2,7 @@
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import {Map, View} from 'ol';
-import {fromLonLat, get  } from 'ol/proj';
+import {fromLonLat, get, transform} from 'ol/proj';
 import { ref, onMounted, watch } from 'vue';
 import 'ol/ol.css';
 import FullScreen from 'ol/control/FullScreen.js';
@@ -27,6 +27,11 @@ import Draw from 'ol/interaction/Draw.js';
 import Modify from 'ol/interaction/Modify.js';
 import Snap from 'ol/interaction/Snap.js';
 import { Style,  Circle as CircleStyle, Fill, Stroke } from 'ol/style';
+import LanLonDataModal from "@/components/LanLonData.vue";
+import { getJsonAxios} from "@/axios.js";
+import WKT from 'ol/format/WKT';
+import { Point } from 'ol/geom';
+
 
 let map;
 let mousePositionControl;
@@ -153,11 +158,44 @@ const drawVector = new VectorLayer({
   }),
 });
 
+const showModal = ref(false);
+const selectedLanLon = ref(null);
+
+const openModal = () => {
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
+
+
 const extent = get(projection.value).getExtent().slice();
 extent[0] += extent[0];
 extent[2] += extent[2];
 
 const modify = new Modify({source: source});
+
+const savePoint = async (newPoint) => {
+  try {
+    console.log("newPoint = ", newPoint);
+
+
+    const pointGeom = new Point([newPoint.lon, newPoint.lat]);
+    const wktFormat = new WKT();
+    const wktString = wktFormat.writeGeometry(pointGeom);
+    const data = {
+      name: newPoint.name,
+      geom: wktString
+    }
+    console.log("data = ", data);
+    await getJsonAxios.post('point', data);
+    showModal.value = false;
+  }catch (error){
+    console.error('Error saving point: ', error);
+  }
+}
+
 const addInteractions = () => {
   if (!map || !drawType.value) {
     console.log('Map or drawType is not ready.');
@@ -168,7 +206,16 @@ const addInteractions = () => {
   type: drawType.value,
   });
   map.addInteraction(draw);
-
+  map.on('click', (e) => {
+    openModal();
+    const coord = e.coordinate
+    const [lon, lat] = transform(coord, 'EPSG:3857', 'EPSG:4326')
+    selectedLanLon.value = {
+      lon: lon,
+      lat: lat
+    };
+    console.log('lon:', lon, 'lat:', lat)
+  })
   snap = new Snap({ source: source });
   map.addInteraction(snap);
   map.addInteraction(modify);
@@ -241,6 +288,19 @@ watch(drawType, () => {
 </script>
 
 <template>
+
+  <teleport to="#modal">
+    <LanLonDataModal
+      v-if="showModal"
+      :showModal="showModal"
+      :lanLonData="selectedLanLon"
+      @closeModal="closeModal"
+      @savePoint="savePoint"
+
+    />
+  </teleport>
+
+
   <div>
     <button @click="onWMS" class="btn btn-success mb-2">
         {{ showWMS ? "Off WMS" : "On WMS" }}
