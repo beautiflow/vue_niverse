@@ -14,8 +14,7 @@ export function toggleMyGeoPolygon(map, showPolygonRef, setViewPosition) {
         params: {
           'VERSION': '1.1.0',
           'LAYERS': 'polygon',
-          'BBOX': [-71.1776820268866, 36.367316228570296, 127.38762693804684, 42.3903825660754],
-          'SRS': 'EPSG:3857',
+          'SRS': 'EPSG:4326',
           'FORMAT': 'image/png'
         },
         ratio: 1,
@@ -27,6 +26,7 @@ export function toggleMyGeoPolygon(map, showPolygonRef, setViewPosition) {
       center: fromLonLat([127.3905, 36.3705]),
       zoom: 16,
     });
+    console.log(polygonLayer);
 
     map.addLayer(polygonLayer);
   } else {

@@ -166,15 +166,20 @@ const drawVector = new VectorLayer({
   }),
 });
 
-const showPointModal = ref(false);
+const showModal = ref(false);
 const selectedPoint = ref(null);
+const selectedPolygon = ref(null);
 
 const openPointModal = () => {
-  showPointModal.value = true;
+  showModal.value = true;
 };
 
+const openPolygonModal = () => {
+  showModal.value = true;
+}
+
 const closeModal = () => {
-  showPointModal.value = false;
+  showModal.value = false;
 };
 
 
@@ -189,15 +194,31 @@ const savePoint = async (newPoint) => {
     const pointGeom = new Point([newPoint.lon, newPoint.lat]);
     const wktFormat = new WKT();
     const wktString = wktFormat.writeGeometry(pointGeom);
-    const data = {
+    const pointData = {
       name: newPoint.name,
       geom: wktString
     }
-    console.log("data = ", data);
-    await getJsonAxios.post('point', data);
-    showPointModal.value = false;
+    console.log("pointData = ", pointData);
+    await getJsonAxios.post('point', pointData);
+    showModal.value = false;
   }catch (error){
     console.error('Error saving point: ', error);
+  }
+}
+
+const savePolygon = async (newPolygon) => {
+  try {
+    const polyGeom = selectedPolygon.value.wktPolygon ;
+    const polygonData = {
+      name: newPolygon.name,
+      geom: polyGeom
+    }
+    console.log("polygonData = ", polygonData);
+    await getJsonAxios.post('polygon', polygonData);
+    showModal.value = false;
+  }
+  catch (error) {
+    console.error('Error saving polygon: ', error);
   }
 }
 
@@ -223,7 +244,22 @@ const addInteractions = () => {
       };
       console.log('lon:', lon, 'lat:', lat)
       }
-    })
+  })
+  draw.on('drawend', (event) => {
+    if (drawType.value === "Polygon") {
+      openPolygonModal();
+      const wktFormat = new WKT();
+      const feature = event.feature;
+      const geom = feature.getGeometry();
+      geom.transform('EPSG:3857', 'EPSG:4326');
+      const wkt = wktFormat.writeGeometry(geom);
+      console.log("WKT:", wkt);
+
+      selectedPolygon.value = {
+        wktPolygon: wkt
+      };
+    }
+  });
 
   snap = new Snap({ source: source });
   map.addInteraction(snap);
@@ -300,12 +336,12 @@ watch(drawType, () => {
 
   <teleport to="#modal">
     <LanLonDataModal
-      v-if="showPointModal"
-      :showPointModal="showPointModal"
+      v-if="showModal"
       :selectedPoint="selectedPoint"
       @closeModal="closeModal"
       @savePoint="savePoint"
-
+      @savePolygon="savePolygon"
+      :drawType="drawType"
     />
   </teleport>
 

@@ -3,26 +3,27 @@
 import {reactive} from "vue";
 
 const props = defineProps({
-  showPointModal: Boolean,
-  selectedPoint: Object
-})
+  selectedPoint: Object,
+  drawType: String,
+});
 
+console.log("draywType = ", props.drawType);
+const PolygonForm = reactive({
+  name: '',
+});
 
 const PointForm = reactive({
   name: '',
   lat: props.selectedPoint.lat || '',
   lon: props.selectedPoint.lon || ''
-})
+});
 
 console.log("selectedPoint = ", props.selectedPoint);
 
-const emit = defineEmits(['closeModal', 'savePoint'])
-
+const emit = defineEmits(['closeModal', 'savePoint', 'savePolygon'])
 const onClose = () => {
   emit('closeModal');
 }
-
-
 
 const onSavePoint = () => {
   console.log("pointForm = ", PointForm.name)
@@ -31,20 +32,27 @@ const onSavePoint = () => {
     document.getElementById('nameInput')?.focus();
     return;
   }
-
-
   emit('savePoint', { ...PointForm });
 }
 
+const onSavePolygon = () => {
+  console.log("polygonForm = ", PolygonForm.name)
+  if(!PolygonForm.name){
+    alert('면의 이름을 입력해주세요.');
+    document.getElementById('nameInput')?.focus();
+    return
+  }
+  emit('savePolygon', { ...PolygonForm });
+}
 
 </script>
 
 <template>
 
-  <div v-if="props.showPointModal" class="modal-backdrop">
+  <div v-if="props.drawType === 'Point'" class="modal-backdrop">
     <div class="modal-content">
       <div style="text-align: center;">
-        <h2>Latitude & Longitude DATA</h2>
+        <h2>Point Data</h2>
         <label>
           이름:
           <input id="nameInput" v-model="PointForm.name" type="text" />
@@ -61,6 +69,21 @@ const onSavePoint = () => {
       <div class="modal-buttons">
         <button class="closeModal btn btn-outline-dark" @click="onClose"><i class="fa-solid fa-rotate-left"></i></button>
         <button class="btn btn-primary" @click="onSavePoint"><i class="fa-regular fa-floppy-disk"></i></button>
+      </div>
+    </div>
+  </div>
+  <div v-if="props.drawType === 'Polygon'" class="modal-backdrop">
+    <div class="modal-content">
+      <div style="text-align: center;">
+        <h2>Polygon Data</h2>
+        <label>
+          이름:
+          <input id="nameInput" v-model="PolygonForm.name" type="text" />
+        </label>
+      </div>
+      <div class="modal-buttons">
+        <button class="closeModal btn btn-outline-dark" @click="onClose"><i class="fa-solid fa-rotate-left"></i></button>
+        <button class="btn btn-primary" @click="onSavePolygon"><i class="fa-regular fa-floppy-disk"></i></button>
       </div>
     </div>
   </div>
