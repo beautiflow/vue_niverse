@@ -1,6 +1,6 @@
 <script setup>
 import SideNavbar from '@/components/SideNavbar.vue';
-import Map from '@/components/LayersMap.vue';
+import LayersMap from '@/components/LayersMap.vue';
 
 </script>
 
@@ -9,8 +9,8 @@ import Map from '@/components/LayersMap.vue';
   <h1 style="text-align: center; font-weight: bold;">
     Open Layers Map
   </h1>
-  <Map />
-  
+  <LayersMap />
+
 </template>
 
 
