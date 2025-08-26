@@ -136,6 +136,18 @@ const reconfigureScaleLine = () => {
   map.addControl(scaleControl());
 }
 
+const onChangedrawType = () => {
+  console.log("change drawType = ", drawType.value);
+  map.removeInteraction(draw);
+  map.removeInteraction(snap);
+  addInteractions();
+}
+
+const onChangePrecision = (event) => {
+  const newVal = event.target.value;
+  mousePositionControl.setCoordinateFormat(createStringXY(newVal));
+};
+
 const onInvertColorsChange = () => {
 control.element.classList.toggle(
     'ol-scale-bar-inverted',
@@ -210,17 +222,14 @@ const saveGeometry = async (formData) => {
     console.error("Unsupported geometry type:", formData.type);
     return;
   }
-
   try {
     const geom = geomType.getGeom(formData);
     const payload = {
       name: formData.name,
       geom
     };
-
     console.log(`${formData.type} Data =`, payload);
     await getJsonAxios.post(geomType.url, payload);
-
     showModal.value = false;
   } catch (error) {
     console.error(`Error saving ${formData.type}:`, error);
@@ -333,16 +342,6 @@ watch(projection, (newVal) => {
   mousePositionControl.setProjection(newVal);
 });
 
-watch(precision, (newVal) => {
-  mousePositionControl.setCoordinateFormat(createStringXY(newVal));
-});
-
-watch(drawType, () => {
-    map.removeInteraction(draw);
-    map.removeInteraction(snap);
-    addInteractions();
-});
-
 </script>
 
 <template>
@@ -392,7 +391,7 @@ watch(drawType, () => {
         <option value="EPSG:3857">EPSG:3857</option>
       </select>
       <label for="precision">Precision</label>
-      <input id="precision" type="number" min="0" max="12" v-model.number="precision" />
+      <input id="precision" type="number" min="0" max="12" v-model.number="precision" @change="onChangePrecision" />
     </form>
     <!-- control - scaleLine -->
     <label for="units">Units:</label>
@@ -415,7 +414,7 @@ watch(drawType, () => {
     <!-- interaction - draw and modify features -->
     <form>
       <label for="drawType">Geometry type &nbsp;</label>
-      <select id="drawType" v-model="drawType">
+      <select id="drawType" v-model="drawType" @change="onChangedrawType">
         <option value="">-- 도형 타입 선택 --</option>
         <option value="Point">Point</option>
         <option value="LineString">LineString</option>
