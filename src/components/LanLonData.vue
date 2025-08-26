@@ -18,11 +18,10 @@ const PolygonForm = reactive({
 
 const PointForm = reactive({
   name: '',
-  lat: props.selectedPoint.lat || '',
-  lon: props.selectedPoint.lon || ''
+  lat: props.selectedPoint?.lat || '',
+  lon: props.selectedPoint?.lon || ''
 });
 
-console.log("selectedPoint = ", props.selectedPoint);
 
 const emit = defineEmits(['closeModal', 'savePoint', 'savePolygon', 'SaveLine'])
 const onClose = () => {

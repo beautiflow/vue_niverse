@@ -2,7 +2,7 @@
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import {Map, View} from 'ol';
-import {fromLonLat, get, transform} from 'ol/proj';
+import {fromLonLat, get} from 'ol/proj';
 import { ref, onMounted, watch } from 'vue';
 import 'ol/ol.css';
 import FullScreen from 'ol/control/FullScreen.js';
@@ -254,47 +254,37 @@ const addInteractions = () => {
   });
   map.addInteraction(draw);
   console.log(drawType.value);
-    map.on('click', (e) => {
-      if(drawType.value === "Point") {
-        openPointModal();
-      const coord = e.coordinate
-      const [lon, lat] = transform(coord, 'EPSG:3857', 'EPSG:4326')
-        selectedPoint.value = {
-        lon: lon,
-        lat: lat
-      };
-      console.log('lon:', lon, 'lat:', lat)
-      }
-  })
   draw.on('drawend', (event) => {
-    if(drawType.value === "LineString"){
-      console.log("line dray typeqqqqqq = ", drawType.value);
-      openLineModal();
-      const wktFormat = new WKT();
-      const feature = event.feature;
-      const geom = feature.getGeometry();
-      geom.transform('EPSG:3857', 'EPSG:4326');
-      const wkt = wktFormat.writeFeature(feature);
-      console.log("WKT:", wkt);
+    const feature = event.feature;
+    const geom = feature.getGeometry();
+    geom.transform('EPSG:3857', 'EPSG:4326');
+    const wktFormat = new WKT();
 
-      selectedLine.value = {
-        wktLine: wkt
-      }
-    }
-    if (drawType.value === "Polygon") {
-      openPolygonModal();
-      const wktFormat = new WKT();
-      const feature = event.feature;
-      const geom = feature.getGeometry();
-      geom.transform('EPSG:3857', 'EPSG:4326');
-      const wkt = wktFormat.writeGeometry(geom);
-      console.log("WKT:", wkt);
-
-      selectedPolygon.value = {
-        wktPolygon: wkt
+    if(drawType.value === "Point") {
+      openPointModal();
+      const coord = geom.getCoordinates();
+      selectedPoint.value = {
+        lon: coord[0],
+        lat: coord[1]
       };
+      console.log("Point:", coord);
+    }
+
+    if(drawType.value === "LineString") {
+      openLineModal();
+      const wkt = wktFormat.writeFeature(feature);
+      selectedLine.value = { wktLine: wkt };
+      console.log("Line WKT:", wkt);
+    }
+
+    if(drawType.value === "Polygon") {
+      openPolygonModal();
+      const wkt = wktFormat.writeGeometry(geom);
+      selectedPolygon.value = { wktPolygon: wkt };
+      console.log("Polygon WKT:", wkt);
     }
   });
+
 
   snap = new Snap({ source: source });
   map.addInteraction(snap);
