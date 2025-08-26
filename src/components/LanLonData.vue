@@ -3,115 +3,43 @@
 import {reactive} from "vue";
 
 const props = defineProps({
-  selectedPoint: Object,
   drawType: String,
 });
+const form = reactive({ name: '' });
 
 console.log("draywType = ", props.drawType);
 
-const LineForm = reactive({
-  name: '',
-});
-const PolygonForm = reactive({
-  name: '',
-});
-
-const PointForm = reactive({
-  name: '',
-  lat: props.selectedPoint?.lat || '',
-  lon: props.selectedPoint?.lon || ''
-});
-
-
-const emit = defineEmits(['closeModal', 'savePoint', 'savePolygon', 'SaveLine'])
+const emit = defineEmits(['closeModal', 'saveGeometry'])
 const onClose = () => {
   emit('closeModal');
 }
 
-const onSavePoint = () => {
-  console.log("pointForm = ", PointForm.name)
-  if (!PointForm.name) {
-    alert('포인트 이름을 입력해주세요.');
+const saveGeometry = () => {
+  console.log("form = ", form.name)
+  if (!form.name) {
+    alert('이름을 입력해주세요.');
     document.getElementById('nameInput')?.focus();
     return;
   }
-  emit('savePoint', { ...PointForm });
+  emit('saveGeometry', { ...form, type: props.drawType });
 }
 
-const onSaveLine = () => {
-  console.log("lineForm = ", LineForm.name)
-  if(!LineForm.name){
-    alert('라인 이름은 입력해주세요.');
-    document.getElementById('nameInput')?.focus();
-    return;
-  }
-  emit('SaveLine', { ...LineForm });
-}
-
-const onSavePolygon = () => {
-  console.log("polygonForm = ", PolygonForm.name)
-  if(!PolygonForm.name){
-    alert('면의 이름을 입력해주세요.');
-    document.getElementById('nameInput')?.focus();
-    return
-  }
-  emit('savePolygon', { ...PolygonForm });
-}
 
 </script>
 
 <template>
-
-  <div v-if="props.drawType === 'Point'" class="modal-backdrop">
+  <div class="modal-backdrop">
     <div class="modal-content">
       <div style="text-align: center;">
-        <h2>Point Data</h2>
-        <label>
+        <h2>{{ props.drawType }} Data</h2>
+          <label>
           이름:
-          <input id="nameInput" v-model="PointForm.name" type="text" />
-        </label>
-        <label>
-          위도:
-          <input id="latitudeInput" v-model="PointForm.lat" type="text" readonly />
-        </label>
-        <label>
-          경도:
-          <input id="longitudeInput" v-model="PointForm.lon" type="text" readonly />
+          <input id="nameInput" v-model="form.name" type="text" />
         </label>
       </div>
       <div class="modal-buttons">
         <button class="closeModal btn btn-outline-dark" @click="onClose"><i class="fa-solid fa-rotate-left"></i></button>
-        <button class="btn btn-primary" @click="onSavePoint"><i class="fa-regular fa-floppy-disk"></i></button>
-      </div>
-    </div>
-  </div>
-  <div v-if="props.drawType === 'LineString'" class="modal-backdrop">
-    <div class="modal-content">
-      <div style="text-align: center;">
-        <h2>LineString Data</h2>
-        <label>
-          이름:
-          <input id="nameInput" v-model="LineForm.name" type="text" />
-        </label>
-      </div>
-      <div class="modal-buttons">
-        <button class="closeModal btn btn-outline-dark" @click="onClose"><i class="fa-solid fa-rotate-left"></i></button>
-        <button class="btn btn-primary" @click="onSaveLine"><i class="fa-regular fa-floppy-disk"></i></button>
-      </div>
-    </div>
-  </div>
-  <div v-if="props.drawType === 'Polygon'" class="modal-backdrop">
-    <div class="modal-content">
-      <div style="text-align: center;">
-        <h2>Polygon Data</h2>
-        <label>
-          이름:
-          <input id="nameInput" v-model="PolygonForm.name" type="text" />
-        </label>
-      </div>
-      <div class="modal-buttons">
-        <button class="closeModal btn btn-outline-dark" @click="onClose"><i class="fa-solid fa-rotate-left"></i></button>
-        <button class="btn btn-primary" @click="onSavePolygon"><i class="fa-regular fa-floppy-disk"></i></button>
+        <button class="btn btn-primary" @click="saveGeometry"><i class="fa-regular fa-floppy-disk"></i></button>
       </div>
     </div>
   </div>

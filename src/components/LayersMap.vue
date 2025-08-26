@@ -2,7 +2,7 @@
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import {Map, View} from 'ol';
-import {fromLonLat, get} from 'ol/proj';
+import {fromLonLat} from 'ol/proj';
 import { ref, onMounted, watch } from 'vue';
 import 'ol/ol.css';
 import FullScreen from 'ol/control/FullScreen.js';
@@ -58,6 +58,8 @@ const stepsRange = ref('');
 const scaleTextCheckbox = ref(null);
 const invertColorsCheckbox = ref(null);
 const drawType = ref('');
+
+
 
 // 기본 지도
 const defaultMap = {
@@ -181,54 +183,49 @@ const closeModal = () => {
 
 const modify = new Modify({source: source});
 
-const savePoint = async (newPoint) => {
-  try {
-    const pointGeom = new Point([newPoint.lon, newPoint.lat]);
-    const wktFormat = new WKT();
-    const wktString = wktFormat.writeGeometry(pointGeom);
-    const pointData = {
-      name: newPoint.name,
-      geom: wktString
-    }
-    console.log("pointData = ", pointData);
-    await getJsonAxios.post('point', pointData);
-    showModal.value = false;
-  }catch (error){
-    console.error('Error saving point: ', error);
+const geometryType = {
+  Point: {
+    type: 'Point',
+    url: 'point',
+    getGeom: () => selectedPoint.value.wktPoint
+  },
+  LineString: {
+    type: 'LineString',
+    url: 'line',
+    getGeom: () => selectedLine.value.wktLine
+  },
+  Polygon: {
+    type: 'Polygon',
+    url: 'polygon',
+    getGeom: () => selectedPolygon.value.wktPolygon
   }
-}
+};
 
-const saveLine = async (newLine) => {
-  try {
-    console.log(newLine.name);
-    const lineGeom = selectedLine.value.wktLine;
-    const lineData = {
-      name: newLine.name,
-      geom: lineGeom
-    }
-    console.log("lineData = ", lineData);
-    await getJsonAxios.post('line', lineData);
-    showModal.value = false;
-  }catch (error){
-    console.error('Error saving polygon: ', error);
-  }
-}
 
-const savePolygon = async (newPolygon) => {
+const saveGeometry = async (formData) => {
+  const geomType = geometryType[formData.type];
+  console.log('geomType = ', geomType);
+  console.log('form data = ', formData);
+  if (!geomType) {
+    console.error("Unsupported geometry type:", formData.type);
+    return;
+  }
+
   try {
-    const polyGeom = selectedPolygon.value.wktPolygon ;
-    const polygonData = {
-      name: newPolygon.name,
-      geom: polyGeom
-    }
-    console.log("polygonData = ", polygonData);
-    await getJsonAxios.post('polygon', polygonData);
+    const geom = geomType.getGeom(formData);
+    const payload = {
+      name: formData.name,
+      geom
+    };
+
+    console.log(`${formData.type} Data =`, payload);
+    await getJsonAxios.post(geomType.url, payload);
+
     showModal.value = false;
+  } catch (error) {
+    console.error(`Error saving ${formData.type}:`, error);
   }
-  catch (error) {
-    console.error('Error saving polygon: ', error);
-  }
-}
+};
 
 const addInteractions = () => {
   if (!map || !drawType.value) {
@@ -250,28 +247,32 @@ const addInteractions = () => {
     if(drawType.value === "Point") {
       openModal();
       const coord = geom.getCoordinates();
+      const pointGeom = new Point([coord[0], coord[1]]);
+      const wkt = wktFormat.writeGeometry(pointGeom);
       selectedPoint.value = {
-        lon: coord[0],
-        lat: coord[1]
+        wktPoint: wkt
       };
-      console.log("Point:", coord);
+      console.log("Point:", wkt);
     }
 
     if(drawType.value === "LineString") {
       openModal();
       const wkt = wktFormat.writeFeature(feature);
-      selectedLine.value = { wktLine: wkt };
+      selectedLine.value = {
+        wktLine: wkt
+      };
       console.log("Line WKT:", wkt);
     }
 
     if(drawType.value === "Polygon") {
       openModal();
       const wkt = wktFormat.writeGeometry(geom);
-      selectedPolygon.value = { wktPolygon: wkt };
+      selectedPolygon.value = {
+        wktPolygon: wkt
+      };
       console.log("Polygon WKT:", wkt);
     }
   });
-
 
   snap = new Snap({ source: source });
   map.addInteraction(snap);
@@ -348,12 +349,9 @@ watch(drawType, () => {
 
   <teleport to="#modal">
     <LanLonDataModal
-      v-if="showModal"
-      :selectedPoint="selectedPoint"
+      v-if="showModal && geometryType[drawType]"
       @closeModal="closeModal"
-      @savePoint="savePoint"
-      @saveLine="saveLine"
-      @savePolygon="savePolygon"
+      @saveGeometry="saveGeometry"
       :drawType="drawType"
     />
   </teleport>
