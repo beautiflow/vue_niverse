@@ -357,22 +357,34 @@ watch(projection, (newVal) => {
 
 
   <div>
-    <button @click="onWMS" class="btn btn-success mb-2">
+    <button
+      class="btn btn-success mb-2"
+      @click="onWMS">
         {{ showWMS ? "Off WMS" : "On WMS" }}
     </button>
-    <button @click="onWFS" class="btn btn-primary ms-2 mb-2 ">
+    <button
+      class="btn btn-primary ms-2 mb-2"
+      @click="onWFS">
         {{ showWFS ? "Off WFS" : "On WFS" }}
     </button>
-    <button @click="onMyGeoPolygon" class="btn btn-dark ms-2 mb-2 ">
+    <button
+      class="btn btn-dark ms-2 mb-2"
+      @click="onMyGeoPolygon" >
         {{ showMyGeoPolygon ? "Off MyGeoPolygon" : "On MyGeoPolygon" }}
     </button>
-    <button @click="onMyGeoLine" class="btn btn-info ms-2 mb-2 ">
+    <button
+      class="btn btn-info ms-2 mb-2"
+      @click="onMyGeoLine">
       {{ showMyGeoLine ? "Off MyGeoLine" : "On MyGeoLine" }}
     </button>
-    <button @click="onMyGeoPoint" class="btn btn-danger ms-2 mb-2 ">
+    <button
+      class="btn btn-danger ms-2 mb-2"
+      @click="onMyGeoPoint">
         {{ showMyGeoPoint ? "Off MyGeoPoint" : "On MyGeoPoint" }}
     </button>
-     <button @click="onTranslate" class="btn btn-warning ms-2 mb-2 ">
+    <button
+       class="btn btn-warning ms-2 mb-2"
+       @click="onTranslate" >
         {{ showTranslate ? "Off Translate" : "On Translate" }}
     </button>
   </div>

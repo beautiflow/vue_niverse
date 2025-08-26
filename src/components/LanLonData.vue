@@ -38,8 +38,16 @@ const saveGeometry = () => {
         </label>
       </div>
       <div class="modal-buttons">
-        <button class="closeModal btn btn-outline-dark" @click="onClose"><i class="fa-solid fa-rotate-left"></i></button>
-        <button class="btn btn-primary" @click="saveGeometry"><i class="fa-regular fa-floppy-disk"></i></button>
+        <button
+          class="closeModal btn btn-outline-dark"
+          @click="onClose">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+        <button
+          class="btn btn-primary"
+          @click="saveGeometry">
+          <i class="fa-regular fa-floppy-disk"></i>
+        </button>
       </div>
     </div>
   </div>
