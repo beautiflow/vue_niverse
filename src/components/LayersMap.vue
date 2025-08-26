@@ -171,17 +171,9 @@ const selectedPoint = ref(null);
 const selectedLine = ref(null);
 const selectedPolygon = ref(null);
 
-const openPointModal = () => {
+const openModal = () => {
   showModal.value = true;
 };
-
-const openLineModal = () => {
-  showModal.value = true;
-}
-
-const openPolygonModal = () => {
-  showModal.value = true;
-}
 
 const closeModal = () => {
   showModal.value = false;
@@ -261,7 +253,7 @@ const addInteractions = () => {
     const wktFormat = new WKT();
 
     if(drawType.value === "Point") {
-      openPointModal();
+      openModal();
       const coord = geom.getCoordinates();
       selectedPoint.value = {
         lon: coord[0],
@@ -271,14 +263,14 @@ const addInteractions = () => {
     }
 
     if(drawType.value === "LineString") {
-      openLineModal();
+      openModal();
       const wkt = wktFormat.writeFeature(feature);
       selectedLine.value = { wktLine: wkt };
       console.log("Line WKT:", wkt);
     }
 
     if(drawType.value === "Polygon") {
-      openPolygonModal();
+      openModal();
       const wkt = wktFormat.writeGeometry(geom);
       selectedPolygon.value = { wktPolygon: wkt };
       console.log("Polygon WKT:", wkt);
