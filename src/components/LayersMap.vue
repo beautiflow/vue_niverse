@@ -179,11 +179,6 @@ const closeModal = () => {
   showModal.value = false;
 };
 
-
-const extent = get(projection.value).getExtent().slice();
-extent[0] += extent[0];
-extent[2] += extent[2];
-
 const modify = new Modify({source: source});
 
 const savePoint = async (newPoint) => {
