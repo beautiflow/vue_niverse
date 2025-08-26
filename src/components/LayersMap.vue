@@ -168,11 +168,16 @@ const drawVector = new VectorLayer({
 
 const showModal = ref(false);
 const selectedPoint = ref(null);
+const selectedLine = ref(null);
 const selectedPolygon = ref(null);
 
 const openPointModal = () => {
   showModal.value = true;
 };
+
+const openLineModal = () => {
+  showModal.value = true;
+}
 
 const openPolygonModal = () => {
   showModal.value = true;
@@ -203,6 +208,22 @@ const savePoint = async (newPoint) => {
     showModal.value = false;
   }catch (error){
     console.error('Error saving point: ', error);
+  }
+}
+
+const saveLine = async (newLine) => {
+  try {
+    console.log(newLine.name);
+    const lineGeom = selectedLine.value.wktLine;
+    const lineData = {
+      name: newLine.name,
+      geom: lineGeom
+    }
+    console.log("lineData = ", lineData);
+    await getJsonAxios.post('line', lineData);
+    showModal.value = false;
+  }catch (error){
+    console.error('Error saving polygon: ', error);
   }
 }
 
@@ -246,6 +267,20 @@ const addInteractions = () => {
       }
   })
   draw.on('drawend', (event) => {
+    if(drawType.value === "LineString"){
+      console.log("line dray typeqqqqqq = ", drawType.value);
+      openLineModal();
+      const wktFormat = new WKT();
+      const feature = event.feature;
+      const geom = feature.getGeometry();
+      geom.transform('EPSG:3857', 'EPSG:4326');
+      const wkt = wktFormat.writeFeature(feature);
+      console.log("WKT:", wkt);
+
+      selectedLine.value = {
+        wktLine: wkt
+      }
+    }
     if (drawType.value === "Polygon") {
       openPolygonModal();
       const wktFormat = new WKT();
@@ -340,6 +375,7 @@ watch(drawType, () => {
       :selectedPoint="selectedPoint"
       @closeModal="closeModal"
       @savePoint="savePoint"
+      @saveLine="saveLine"
       @savePolygon="savePolygon"
       :drawType="drawType"
     />

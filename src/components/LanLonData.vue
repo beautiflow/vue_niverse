@@ -8,6 +8,10 @@ const props = defineProps({
 });
 
 console.log("draywType = ", props.drawType);
+
+const LineForm = reactive({
+  name: '',
+});
 const PolygonForm = reactive({
   name: '',
 });
@@ -20,7 +24,7 @@ const PointForm = reactive({
 
 console.log("selectedPoint = ", props.selectedPoint);
 
-const emit = defineEmits(['closeModal', 'savePoint', 'savePolygon'])
+const emit = defineEmits(['closeModal', 'savePoint', 'savePolygon', 'SaveLine'])
 const onClose = () => {
   emit('closeModal');
 }
@@ -33,6 +37,16 @@ const onSavePoint = () => {
     return;
   }
   emit('savePoint', { ...PointForm });
+}
+
+const onSaveLine = () => {
+  console.log("lineForm = ", LineForm.name)
+  if(!LineForm.name){
+    alert('라인 이름은 입력해주세요.');
+    document.getElementById('nameInput')?.focus();
+    return;
+  }
+  emit('SaveLine', { ...LineForm });
 }
 
 const onSavePolygon = () => {
@@ -69,6 +83,21 @@ const onSavePolygon = () => {
       <div class="modal-buttons">
         <button class="closeModal btn btn-outline-dark" @click="onClose"><i class="fa-solid fa-rotate-left"></i></button>
         <button class="btn btn-primary" @click="onSavePoint"><i class="fa-regular fa-floppy-disk"></i></button>
+      </div>
+    </div>
+  </div>
+  <div v-if="props.drawType === 'LineString'" class="modal-backdrop">
+    <div class="modal-content">
+      <div style="text-align: center;">
+        <h2>LineString Data</h2>
+        <label>
+          이름:
+          <input id="nameInput" v-model="LineForm.name" type="text" />
+        </label>
+      </div>
+      <div class="modal-buttons">
+        <button class="closeModal btn btn-outline-dark" @click="onClose"><i class="fa-solid fa-rotate-left"></i></button>
+        <button class="btn btn-primary" @click="onSaveLine"><i class="fa-regular fa-floppy-disk"></i></button>
       </div>
     </div>
   </div>
