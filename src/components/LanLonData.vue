@@ -7,7 +7,7 @@ const props = defineProps({
 });
 const form = reactive({ name: '' });
 
-console.log("draywType = ", props.drawType);
+console.log("drawType = ", props.drawType);
 
 const emit = defineEmits(['closeModal', 'saveGeometry'])
 const onClose = () => {
@@ -23,7 +23,6 @@ const saveGeometry = () => {
   }
   emit('saveGeometry', { ...form, type: props.drawType });
 }
-
 
 </script>
 

@@ -136,7 +136,7 @@ const reconfigureScaleLine = () => {
   map.addControl(scaleControl());
 }
 
-const onChangedrawType = () => {
+const onChangeDrawType = () => {
   console.log("change drawType = ", drawType.value);
   map.removeInteraction(draw);
   map.removeInteraction(snap);
@@ -426,7 +426,7 @@ watch(projection, (newVal) => {
     <!-- interaction - draw and modify features -->
     <form>
       <label for="drawType">Geometry type &nbsp;</label>
-      <select id="drawType" v-model="drawType" @change="onChangedrawType">
+      <select id="drawType" v-model="drawType" @change="onChangeDrawType">
         <option value="">-- 도형 타입 선택 --</option>
         <option value="Point">Point</option>
         <option value="LineString">LineString</option>
