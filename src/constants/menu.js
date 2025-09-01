@@ -37,6 +37,12 @@ export const MenuItems = [
   },
   {
     id: 7,
+    icon:'fa-regular fa-calendar',
+    route:'/datePicker',
+    label:'DatePicker'
+  },
+  {
+    id: 8,
     icon:'fa-solid fa-gear',
     route:'/settings',
     label:'Settings'

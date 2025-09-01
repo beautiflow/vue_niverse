@@ -7,6 +7,7 @@ import Constellations from '@/views/ConstellationsRoom.vue';
 import MoonPhases from '@/views/MoonPhases.vue';
 import Settings from '@/views/Settings.vue';
 import Profile from '@/views/Profile.vue';
+import DatePicker from '@/views/DatePicker.vue';
 import OpenLayersMap from '@/views/OpenLayersMap.vue';
 import BoardDetail from '@/views/community/BoardDetail.vue';
 
@@ -48,7 +49,12 @@ const router = createRouter({
       name: 'moonPhases',
       component: MoonPhases,
     },
-        {
+    {
+      path: '/datePicker',
+      name: 'DatePicker',
+      component: DatePicker,
+    },
+    {
       path: '/settings',
       name: 'Settings',
       component: Settings,

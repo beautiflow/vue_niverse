@@ -8,8 +8,8 @@ import { RouterView } from 'vue-router';
 
 <style scoped>
 #app{
-  background-color: black; 
-  color: white;            
+  background-color: black;
+  color: white;
 }
 
 header {
