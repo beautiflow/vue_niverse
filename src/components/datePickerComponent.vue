@@ -34,6 +34,7 @@ watch(pickerDate, (newValue) => {
 </script>
 
 <template>
+  <div>
   <label>{{ label }}</label>
 
   <Datepicker
@@ -52,4 +53,6 @@ watch(pickerDate, (newValue) => {
     :select-text="selectText"
     :cancel-text="cancelText"
   />
+  </div>
 </template>
+
