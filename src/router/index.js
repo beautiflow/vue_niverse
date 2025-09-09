@@ -10,6 +10,7 @@ import Profile from '@/views/Profile.vue';
 import DatePicker from '@/views/DatePicker.vue';
 import OpenLayersMap from '@/views/OpenLayersMap.vue';
 import BoardDetail from '@/views/community/BoardDetail.vue';
+import VueCharts from '@/views/VueCharts.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +54,11 @@ const router = createRouter({
       path: '/datePicker',
       name: 'DatePicker',
       component: DatePicker,
+    },
+    {
+      path: '/Charts',
+      name: 'Charts',
+      component: VueCharts,
     },
     {
       path: '/settings',

@@ -17,32 +17,38 @@ export const MenuItems = [
     route: '/openLayers',
     label:'Open Layers Map'
   },
-  {
-    id: 4,
-    icon:'fa-solid fa-earth-asia',
-    route: '/aboutEarth',
-    label:'About Earth'
-  },
-  {
-    id: 5,
-    icon:'fa-regular fa-star',
-    route:'/constellations',
-    label:'Constellations'
-  },
-  {
-    id: 6,
-    icon:'fa-solid fa-moon',
-    route:'/moonPhases',
-    label:'Moon Phases'
-  },
+  // {
+  //   id: 4,
+  //   icon:'fa-solid fa-earth-asia',
+  //   route: '/aboutEarth',
+  //   label:'About Earth'
+  // },
+  // {
+  //   id: 5,
+  //   icon:'fa-regular fa-star',
+  //   route:'/constellations',
+  //   label:'Constellations'
+  // },
+  // {
+  //   id: 6,
+  //   icon:'fa-solid fa-moon',
+  //   route:'/moonPhases',
+  //   label:'Moon Phases'
+  // },
   {
     id: 7,
     icon:'fa-regular fa-calendar',
     route:'/datePicker',
-    label:'DatePicker'
+    label:'Date Picker'
   },
   {
     id: 8,
+    icon:'fa-solid fa-chart-simple',
+    route:'/charts',
+    label:'Charts'
+  },
+  {
+    id: 9,
     icon:'fa-solid fa-gear',
     route:'/settings',
     label:'Settings'
