@@ -10,6 +10,9 @@ export const defaultOptionsByType = {
       curve: 'smooth',
       width: 2
     },
+    title: {
+      text: ''
+    },
     markers: {
       size: 4,
       hover: { size: 6 }
@@ -29,6 +32,9 @@ export const defaultOptionsByType = {
       curve: 'smooth',
       width: 2
     },
+    title: {
+      text: ''
+    },
     fill: {
       type: 'gradient',
       gradient: {
@@ -38,7 +44,7 @@ export const defaultOptionsByType = {
         stops: [0, 90, 100]
       }
     },
-    dataLabels: { enabled: false },
+    dataLabels: { enabled: true },
     grid: {
       borderColor: '#f1f1f1',
       strokeDashArray: 3
@@ -59,6 +65,9 @@ export const defaultOptionsByType = {
           position: 'top'
         }
       }
+    },
+    title: {
+      text: ''
     },
     dataLabels: {
       enabled: false,
@@ -82,6 +91,9 @@ export const defaultOptionsByType = {
       position: 'bottom',
       horizontalAlign: 'center',
     },
+    title: {
+      text: ''
+    },
     plotOptions: {
       pie: {
         dataLabels: {
@@ -101,6 +113,9 @@ export const defaultOptionsByType = {
     chart: {
       type: 'donut',
       toolbar: { show: false }
+    },
+    title: {
+      text: ''
     },
     plotOptions: {
       pie: {
@@ -128,6 +143,9 @@ export const defaultOptionsByType = {
     chart: {
       type: 'radialBar',
       toolbar: { show: true }
+    },
+    title: {
+      text: ''
     },
     plotOptions: {
       radialBar: {
@@ -160,12 +178,18 @@ export const defaultOptionsByType = {
       type: 'bubble',
       toolbar: {show: true}
     },
+    title: {
+      text: ''
+    },
 
   },
   heatmap: {
     chart:{
       type: 'heatmap',
       toolbar: {show: true}
+    },
+    title: {
+      text: ''
     },
     plotOptions: {
       heatmap: {
@@ -179,6 +203,9 @@ export const defaultOptionsByType = {
     chart: {
       type: 'scatter',
       toolbar: {show: true}
+    },
+    title: {
+      text: ''
     },
     plotOptions: {
       scatter: {
@@ -198,6 +225,9 @@ export const defaultOptionsByType = {
     chart: {
       type: 'treemap',
       toolbar: {show: true}
+    },
+    title: {
+      text: ''
     },
     plotOptions: {
       treemap: {
@@ -220,6 +250,9 @@ export const defaultOptionsByType = {
       type: 'boxPlot',
       toolbar: {show: true}
     },
+    title: {
+      text: ''
+    },
     plotOptions: {
       boxPlot: {
         colors: {
@@ -238,6 +271,9 @@ export const defaultOptionsByType = {
         type: 'candlestick',
         toolbar: { show: true }
       },
+    title: {
+      text: ''
+    },
       plotOptions: {
         candlestick: {
           colors: {
@@ -263,6 +299,9 @@ export const defaultOptionsByType = {
     chart: {
       type: 'radar',
       toolbar: {show: true}
+    },
+    title: {
+      text: ''
     },
     plotOptions: {
       radar: {
@@ -293,6 +332,9 @@ export const defaultOptionsByType = {
       type: 'polarArea',
       toolbar: { show: true}
     },
+    title: {
+      text: ''
+    },
     plotOptions: {
       polarArea: {
         rings: {
@@ -322,6 +364,9 @@ export const defaultOptionsByType = {
     chart: {
       type: 'rangeBar',
       toolbar: { show: true}
+    },
+    title: {
+      text: ''
     },
     plotOptions: {
 

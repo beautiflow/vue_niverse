@@ -21,6 +21,9 @@ const chartOptions = ref({
     id: 'my-first-chart',
     stacked: false,
   },
+  title: {
+    text: 'line and bar charts'
+  },
   stroke: {
     width: [2, 0],
     curve: 'smooth'
@@ -61,6 +64,9 @@ const pieOptions = ref({
   chart: {
     type: 'pie'
   },
+  title: {
+    text: 'pie charts'
+  },
   labels: ['Apple', 'Mango', 'Orange', 'Watermelon', 'Grape'],
   responsive: [{
     breakpoint: 480,
@@ -80,6 +86,12 @@ const donutSeries = ref([44, 55, 13, 43, 22]);
 
 // Donut Options
 const donutOptions = ref({
+  chart: {
+    type: 'donut'
+  },
+  title: {
+    text: 'donut charts'
+  },
   labels: ['Apple', 'Mango', 'Orange', 'Watermelon', 'Grape'],
   colors: ['#775DD0', '#00E396', '#FEB019', '#FF4560', '#008FFB'],
   responsive: [{
@@ -108,6 +120,9 @@ const areaOptions = ref({
     type: 'area',
     height: 350,
     toolbar: { show: true }
+  },
+  title: {
+    text: 'area charts'
   },
   colors: ['#00E396', '#008FFB'],
   dataLabels: { enabled: false },
@@ -227,6 +242,9 @@ const heatmapOptions = ref({
   chart: {
     type: 'heatmap'
   },
+  title: {
+    text: 'heatmap charts'
+  },
   // 히트맵 전용 옵션
   plotOptions: {
     heatmap: {
@@ -279,6 +297,9 @@ const scatterOptions = ref({
       type: 'xy'
     }
   },
+  title: {
+    text: 'scatter charts'
+  },
   xaxis: {
     tickAmount: 10,
     labels: {
@@ -298,6 +319,9 @@ const radialBarOptions = ref({
   chart: {
     height: 350,
     type: 'radialBar',
+  },
+  title: {
+    text: 'radialBar charts'
   },
   plotOptions: {
     radialBar: {
@@ -348,6 +372,9 @@ const bubbleOptions = {
     type: 'bubble',
     height: 350,
     toolbar: { show: true }
+  },
+  title: {
+    text: 'bubble charts'
   },
   xaxis: {
     tickAmount: 12,
@@ -437,6 +464,9 @@ const treemapOptions = ref({
     height: 350,
     type: 'treemap'
   },
+  title: {
+    text: 'treemap charts'
+  },
   legend: {
     show: false
   },
@@ -481,6 +511,9 @@ const boxPlotOptions = ref({
   chart: {
     type: 'boxPlot',
     height: 350
+  },
+  title: {
+    text: 'boxPlot charts'
   },
   plotOptions: {
     boxPlot: {
@@ -784,6 +817,9 @@ const polarAreaOptions = ref({
   chart: {
     type: 'polarArea',
   },
+  title: {
+    text: 'polarArea charts'
+  },
   stroke: {
     colors: ['#fff']
   },
@@ -849,6 +885,9 @@ const rangeBarOptions = ref({
       horizontal: true
     }
   },
+  title: {
+    text: 'rangeBar charts'
+  },
   xaxis: {
     type: 'datetime'
   }
@@ -869,8 +908,6 @@ const rangeBarOptions = ref({
       <div class="chart-wrapper">
         <ChartComponent
           type="line"
-          title="Line and bar Chart"
-          subtitle="Monthly Performance"
           :series="chartSeries"
           :options="chartOptions"
           :height="400"
@@ -879,8 +916,6 @@ const rangeBarOptions = ref({
       <div class="chart-wrapper">
         <ChartComponent
           type="area"
-          title="area Chart"
-          subtitle="Monthly Performance"
           :series="areaSeries"
           :options="areaOptions"
           :height="400"
@@ -890,7 +925,6 @@ const rangeBarOptions = ref({
         <div class="chart-item">
           <ChartComponent
             type="pie"
-            title="pie Chart"
             :series="pieSeries"
             :options="pieOptions"
             :height="350"
@@ -899,8 +933,6 @@ const rangeBarOptions = ref({
         <div class="chart-item">
           <ChartComponent
             type="donut"
-            title="Line Chart"
-            subtitle="2024 Q4"
             :series="donutSeries"
             :options="donutOptions"
             :height="350"
@@ -910,7 +942,6 @@ const rangeBarOptions = ref({
       <div class="chart-wrapper">
         <ChartComponent
           type="radialBar"
-          title="radialBar Chart"
           :series="radialBarSeries"
           :options="radialBarOptions"
           :height="400"
@@ -919,7 +950,6 @@ const rangeBarOptions = ref({
       <div class="chart-wrapper">
         <ChartComponent
           type="scatter"
-          title="scatter Chart"
           :series="scatterSeries"
           :options="scatterOptions"
           :height="400"
@@ -928,14 +958,12 @@ const rangeBarOptions = ref({
       <div class="charts-grid">
         <ChartComponent
           type="bubble"
-          title="bubble Chart"
           :series="bubbleSeries"
           :options="bubbleOptions"
           :height="400"
         />
         <ChartComponent
           type="heatmap"
-          title="heatmap Chart"
           :series="heatmapSeries"
           :options="heatmapOptions"
           :height="400"
@@ -945,14 +973,12 @@ const rangeBarOptions = ref({
       <div class="charts-grid">
         <ChartComponent
           type="treemap"
-          title="treemap Chart"
           :series="treemapSeries"
           :options="treemapOptions"
           :height="400"
         />
         <ChartComponent
           type="boxPlot"
-          title="boxPlot Chart"
           :series="boxPlotSeries"
           :options="boxPlotOptions"
           :height="400"
@@ -962,7 +988,6 @@ const rangeBarOptions = ref({
       <div class="chart-wrapper">
         <ChartComponent
           type="candlestick"
-          title="candlestick Chart"
           :series="candlestickSeries"
           :options="candlestickOptions"
           :height="400"
@@ -972,14 +997,12 @@ const rangeBarOptions = ref({
       <div class="charts-grid">
         <ChartComponent
           type="radar"
-          title="radar Chart"
           :series="radarSeries"
           :options="radarOptions"
           :height="400"
         />
         <ChartComponent
           type="polarArea"
-          title="polarArea Chart"
           :series="polarAreaSeries"
           :options="polarAreaOptions"
           :height="400"
@@ -988,7 +1011,6 @@ const rangeBarOptions = ref({
       <div class="chart-wrapper">
         <ChartComponent
           type="rangeBar"
-          title="rangeBar Chart"
           :series="rangeBarSeries"
           :options="rangeBarOptions"
           :height="400"
