@@ -28,23 +28,9 @@ export const defaultOptionsByType = {
       toolbar: { show: true },
       zoom: { enabled: true }
     },
-    stroke: {
-      curve: 'smooth',
-      width: 2
+    dataLabels: {
+      enabled: true,
     },
-    title: {
-      text: ''
-    },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.7,
-        opacityTo: 0.3,
-        stops: [0, 90, 100]
-      }
-    },
-    dataLabels: { enabled: true },
     grid: {
       borderColor: '#f1f1f1',
       strokeDashArray: 3
@@ -70,7 +56,7 @@ export const defaultOptionsByType = {
       text: ''
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
       offsetY: -20,
       style: {
         fontSize: '12px',
@@ -168,7 +154,15 @@ export const defaultOptionsByType = {
             formatter: function (val) {
               return parseInt(val) + '%';
             }
-          }
+          },
+          total: {
+            show: true,
+            label: 'Total',
+            formatter: function (w) {
+              return w.globals.seriesTotals.reduce((acc, curr) => acc + curr, 0);
+            }
+          },
+          enabled: true
         }
       }
     }
@@ -349,6 +343,10 @@ export const defaultOptionsByType = {
         endAngle: 360,
       }
     },
+    legend: {
+      position: 'bottom',
+      horizontalAlign: 'center'
+    },
     stroke: {
       width: 1,
       colors: ['#fff']
@@ -356,9 +354,7 @@ export const defaultOptionsByType = {
     fill: {
       opacity: 0.8
     },
-    legend: {
-      position: 'bottom'
-    },
+
   },
   rangeBar: {
     chart: {

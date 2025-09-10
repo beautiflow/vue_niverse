@@ -1,13 +1,13 @@
 <script setup>
-import { defineProps, computed } from "vue";
+import { defineProps } from "vue";
 import VueApexCharts from "vue3-apexcharts";
-import { defaultOptionsByType } from "@/constants/chartsDefaults.js";
+// import { defaultOptionsByType } from "@/constants/chartsDefaults.js";
 
 /**
  * Props 정의
  *
  * @prop {String} type - 차트 종류
- * @prop {Array} series - 차트 데이터 배열 (필수)
+ * @prop {Array} series - 차트 데이터 배열
  * @prop {Object} [xaxis] - X축 설정
  * @prop {Object} [yaxis] - Y축 설정
  * @prop {Object} [options] - ApexCharts 커스텀 옵션
@@ -46,35 +46,11 @@ const props = defineProps({
   options: { type: Object, default: () => ({}) },
   width: { type: [String, Number], default: '100%' },
   height: { type: [String, Number], default: 350 },
-  autoUpdate: { type: Boolean, default: true },
 });
 
+console.log("props series = ", props.series);
+console.log("props options = ", props.options);
 
-
-const chartOptions = computed(() => {
-  const baseOptions = defaultOptionsByType[props.type];
-
-  return {
-    ...baseOptions,
-    ...props.options,
-    chart: {
-      ...baseOptions.chart,
-      ...props.options.chart
-    }
-  };
-});
-
-
-// Props 변경 감지 (디버깅용)
-// if (import.meta.env.DEV) {
-//   watch(() => props.series, (newVal) => {
-//     console.log('Chart series updated:', newVal);
-//   });
-//
-//   watch(() => props.options, (newVal) => {
-//     console.log('Chart options updated:', newVal);
-//   }, { deep: true });
-// }
 </script>
 
 <template>
@@ -84,10 +60,9 @@ const chartOptions = computed(() => {
       :series="series"
       :xaxis="xaxis"
       :yaxis="yaxis"
-      :options="chartOptions"
+      :options="options"
       :width="width"
       :height="height"
-      :autoUpdate="autoUpdate"
     />
   </div>
 </template>

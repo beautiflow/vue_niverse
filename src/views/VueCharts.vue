@@ -1,7 +1,7 @@
 <script setup>
 import SideNavbar from '@/components/SideNavbar.vue';
 import ChartComponent from '@/components/ChartsComponent.vue';
-import { ref } from 'vue';
+import { ref, shallowRef } from 'vue';
 
 const chartSeries = ref([
   {
@@ -68,16 +68,17 @@ const pieOptions = ref({
     text: 'pie charts'
   },
   labels: ['Apple', 'Mango', 'Orange', 'Watermelon', 'Grape'],
-  responsive: [{
-    breakpoint: 480,
-    options: {
-      chart: { width: 200 },
-      legend: {
-        position: 'bottom',
-      },
-
+  plotOptions: {
+    pie: {
+      dataLabels: {
+        enabled: true,
+      }
     }
-  }],
+  },
+  legend: {
+    position: 'bottom',
+    horizontalAlign: 'center'
+  },
   colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7']
 });
 
@@ -94,13 +95,27 @@ const donutOptions = ref({
   },
   labels: ['Apple', 'Mango', 'Orange', 'Watermelon', 'Grape'],
   colors: ['#775DD0', '#00E396', '#FEB019', '#FF4560', '#008FFB'],
-  responsive: [{
-    breakpoint: 480,
-    options: {
-      chart: { width: 200 },
-      legend: { position: 'bottom' }
+  plotOptions: {
+    pie: {
+      donut: {
+        size: '65%',
+        labels: {
+          show: true,
+          total: {
+            show: true,
+            label: 'Total',
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true
+      }
     }
-  }]
+  },
+  legend: {
+    position: 'bottom',
+    horizontalAlign: 'center'
+  }
 });
 
 const areaSeries = ref([
@@ -125,7 +140,7 @@ const areaOptions = ref({
     text: 'area charts'
   },
   colors: ['#00E396', '#008FFB'],
-  dataLabels: { enabled: false },
+  dataLabels: { enabled: true },
   stroke: { curve: 'smooth' },
   xaxis: {
     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
@@ -326,21 +341,32 @@ const radialBarOptions = ref({
   plotOptions: {
     radialBar: {
       dataLabels: {
+        enabled: true,
         name: {
           fontSize: '22px',
         },
         value: {
-          fontSize: '16px',
+          show: true,
+          fontSize: '14px',
+          fontWeight: 400,
+          offsetY: 5,
+          formatter: function (val) {
+            return parseInt(val);
+          }
         },
         total: {
           show: true,
           label: 'Total',
-          formatter: function () {
-            return 249
+          formatter: function (w) {
+            return w.globals.seriesTotals.reduce((acc, curr) => acc + curr, 0);
           }
-        }
+        },
       }
     }
+  },
+  legend: {
+    position: 'bottom',
+    horizontalAlign: 'center'
   }
 });
 
@@ -840,7 +866,7 @@ const polarAreaOptions = ref({
   }]
 });
 
-const rangeBarSeries = ref([
+const rangeBarSeries = shallowRef([
   {
     data: [
       {
